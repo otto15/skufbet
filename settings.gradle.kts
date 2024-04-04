@@ -1,2 +1,3 @@
 rootProject.name = "skufbet"
-include("core-api", "skufdb")
+include("core-api")
+include("skufdb")
