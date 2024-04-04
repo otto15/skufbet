@@ -6,4 +6,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
     <include file="sql/v202404032332_baseline.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404050010_change_personal_user_profile.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
