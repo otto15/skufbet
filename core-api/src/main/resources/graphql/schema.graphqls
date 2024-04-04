@@ -3,6 +3,21 @@ type Query {
 }
 
 type Event {
-    id: String
-    name: String
+    id: ID
+}
+
+type Mutation {
+    userProfile: UserProfileMutation!
+}
+
+type UserProfileMutation {
+    create(userProfileCreateInput: UserProfileCreateInput!): UserProfileCreatePayload!
+}
+
+input UserProfileCreateInput {
+    phoneNumber: String!
+}
+
+type UserProfileCreatePayload {
+    id: Int!
 }
