@@ -4,10 +4,10 @@ import java.util.Date
 
 data class UserProfileCreateInput(
     val phoneNumber: String,
-//    val password: String,
+    val password: String,
 //    val firstName: String,
 //    val lastName: String,
-//    val mail: String,
+    val mail: String,
 //    val dateOfBirth: Date,
 //    val taxPayerId: String,
 )

@@ -15,7 +15,9 @@ type UserProfileMutation {
 }
 
 input UserProfileCreateInput {
-    phoneNumber: String!
+    phoneNumber: String!,
+    password: String!,
+    mail: String!
 }
 
 type UserProfileCreatePayload {
