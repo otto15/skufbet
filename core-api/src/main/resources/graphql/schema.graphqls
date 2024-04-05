@@ -2,10 +2,6 @@ type Query {
     events: [Event]
 }
 
-type Event {
-    id: ID
-}
-
 type Mutation {
     userProfile: UserProfileMutation!
 }
@@ -21,3 +17,28 @@ input UserProfileCreateInput {
 type UserProfileCreatePayload {
     id: Int!
 }
+
+type Tournament {
+    id: Int
+    name: String
+}
+
+type Sport {
+    id: Int
+    name: String
+}
+
+type Event {
+    id: Int
+    name: String
+#    sport: Sport
+    tournament: Tournament
+}
+
+#query {
+#    events {
+#        tournament {
+#            id
+#        }
+#    }
+#}
