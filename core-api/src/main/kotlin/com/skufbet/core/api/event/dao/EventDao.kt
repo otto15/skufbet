@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class EventDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
-    fun findAll() : List<Event> = jdbcTemplate.query(FIND_AVAILABLE) {
-        rs, _ -> Event(
+    fun findAll(): List<Event> = jdbcTemplate.query(FIND_AVAILABLE) { rs, _ ->
+        Event(
             rs.getInt("id"),
             rs.getInt("tournament_id"),
             rs.getString("sport"),
@@ -18,14 +18,16 @@ class EventDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
         )
     }
 
-    fun findTournamentById(id: Int) : Tournament? = jdbcTemplate.queryForObject(
+    fun findTournamentById(id: Int): Tournament? = jdbcTemplate.queryForObject(
+
         FIND_TOURNAMENT_BY_ID,
         MapSqlParameterSource().addValue("tournament_id", id)
-    ) { rs, _ -> Tournament(
-        rs.getInt("id"),
-        rs.getString("tournament_name"),
-        rs.getBoolean("is_end")
-    )
+    ) { rs, _ ->
+        Tournament(
+            rs.getInt("id"),
+            rs.getString("tournament_name"),
+            rs.getBoolean("is_end")
+        )
     }
 
     companion object {
