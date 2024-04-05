@@ -1,5 +1,6 @@
 type Query {
     events: [Event]
+    linesByEventId(eventId: Int!): [Line]
 }
 
 type Mutation {
@@ -23,22 +24,28 @@ type Tournament {
     name: String
 }
 
-type Sport {
-    id: Int
-    name: String
-}
-
 type Event {
     id: Int
     name: String
-#    sport: Sport
+    sport: String
     tournament: Tournament
 }
 
-#query {
-#    events {
-#        tournament {
-#            id
-#        }
-#    }
-#}
+type Result {
+    id: Int
+    result: String
+    coefficient: Float
+}
+
+enum LineType {
+    TOTAL
+    SCORE
+}
+
+type Line {
+    id: Int
+    type: LineType
+    availableResults: [Result]
+    lineResult: Result
+    isClosed: Boolean
+}
