@@ -3,6 +3,7 @@ scalar Date
 type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
+
 }
 
 type Mutation {
@@ -58,3 +59,11 @@ type Line {
     lineResult: Result
     isClosed: Boolean
 }
+
+#query {
+#    events {
+#        tournament {
+#            id
+#        }
+#    }
+#}
