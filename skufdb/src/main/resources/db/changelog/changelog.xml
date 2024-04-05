@@ -7,4 +7,5 @@
 
     <include file="sql/v202404032332_baseline.sql" relativeToChangelogFile="true"/>
     <include file="sql/v202404050010_change_personal_user_profile.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404050320_add_sample_data.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
