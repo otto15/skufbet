@@ -6,12 +6,15 @@ import com.skufbet.core.api.graphql.model.userprofile.mutation.payload.UserProfi
 import com.skufbet.core.api.userprofile.domain.UserProfile
 import com.skufbet.core.api.userprofile.service.UserProfileCreationService
 import com.skufbet.core.api.userprofile.service.command.UserProfileCreateCommand
+import jakarta.validation.Valid
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
+import org.springframework.validation.annotation.Validated
 
 @Controller
+@Validated
 class UserProfileController(
     private val userProfileCreationService: UserProfileCreationService
 ) {
@@ -21,7 +24,7 @@ class UserProfileController(
     @SchemaMapping("create")
     fun createProfile(
         userProfileMutation: UserProfileMutation,
-        @Argument("userProfileCreateInput") userProfileCreateInput: UserProfileCreateInput
+        @Argument("userProfileCreateInput") @Valid userProfileCreateInput: UserProfileCreateInput
     ): UserProfileCreatePayload {
         return userProfileCreationService
             .create(userProfileCreateInput.toCommand())
