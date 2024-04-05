@@ -1,6 +1,7 @@
 package com.skufbet.core.api.configuration.userprofile
 
 import com.skufbet.core.api.userprofile.dao.UserProfileDao
+import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
 import com.skufbet.core.api.userprofile.service.UserProfileCreationService
 import com.skufbet.skufdb.id.IdGenerator
 import com.skufbet.skufdb.id.PgSequenceIdGenerator
@@ -17,11 +18,16 @@ class UserProfileConfiguration {
         UserProfileDao(jdbcTemplate)
 
     @Bean
+    fun userProfileDetailsDao(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
+        UserProfileDetailsDao(jdbcTemplate)
+
+    @Bean
     fun userProfileCreationService(
         @Qualifier("userProfileIdGenerator") idGenerator: IdGenerator<Int>,
         @Qualifier("userProfileDao") userProfileDao: UserProfileDao,
-        @Qualifier("passwordEncoder") passwordEncoder: PasswordEncoder,
-    ) = UserProfileCreationService(idGenerator, userProfileDao, passwordEncoder)
+        @Qualifier("userProfileDetailsDao") userProfileDetailsDao: UserProfileDetailsDao,
+        @Qualifier("encoder") passwordEncoder: PasswordEncoder,
+    ) = UserProfileCreationService(idGenerator, userProfileDao, userProfileDetailsDao, passwordEncoder)
 
     @Bean
     fun userProfileIdGenerator(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
