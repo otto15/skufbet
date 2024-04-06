@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 class ResultDao(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) {
-
     fun getResultById(resultId: Int): Result? = jdbcTemplate.queryForObject(
         GET_RESULT_BY_ID,
         MapSqlParameterSource().addValue("id", resultId)

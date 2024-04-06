@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller
 class ResultController(
     private val lineService: LineService
 ) {
-
     @BatchMapping(typeName = "Line", field = "availableResults")
     fun getAvailableResults(lines: List<Line>) : Map<Line, List<Result>> = lineService.getAvailableResults(lines)
 

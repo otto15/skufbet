@@ -11,4 +11,3 @@ insert into event (id, tournament_id, sport_id, event_name, is_end)
 values (default, 1, null, 'Navi - Liquid', false);
 insert into event (id, tournament_id, sport_id, event_name, is_end)
 values (default, 2, null, 'Mouz - Astralis', false);
-

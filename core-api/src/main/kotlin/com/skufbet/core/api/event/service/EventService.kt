@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service
 class EventService(
     private val eventDao: EventDao
 ) {
-
     fun findAll() : List<Event> = eventDao.findAll()
 
-    fun findTournamentById(id: Int): Tournament = eventDao.findTournamentById(id)
+    fun findTournamentById(id: Int): Tournament? = eventDao.findTournamentById(id)
 }

@@ -10,9 +10,8 @@ import org.springframework.stereotype.Controller
 class TournamentController(
     private val eventService: EventService
 ) {
-
     @SchemaMapping(typeName = "Event", field = "tournament")
-    fun getTournament(event: Event) : Tournament {
+    fun getTournament(event: Event) : Tournament? {
         return eventService.findTournamentById(event.id)
     }
 }

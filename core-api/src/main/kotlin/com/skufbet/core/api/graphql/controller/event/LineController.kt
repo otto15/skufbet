@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller
 class LineController(
     private val lineService: LineService
 ) {
-
     @QueryMapping
     fun linesByEventId(@Argument eventId: Int) : List<Line> {
         return lineService.getLinesByEventId(eventId)
