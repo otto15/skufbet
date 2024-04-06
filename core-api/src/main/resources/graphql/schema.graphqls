@@ -1,9 +1,6 @@
 type Query {
     events: [Event]
-}
-
-type Event {
-    id: ID
+    linesByEventId(eventId: Int!): [Line]
 }
 
 type Mutation {
@@ -22,4 +19,35 @@ input UserProfileCreateInput {
 
 type UserProfileCreatePayload {
     id: Int!
+}
+
+type Tournament {
+    id: Int
+    name: String
+}
+
+type Event {
+    id: Int
+    name: String
+    sport: String
+    tournament: Tournament
+}
+
+type Result {
+    id: Int
+    result: String
+    coefficient: Float
+}
+
+enum LineType {
+    TOTAL
+    SCORE
+}
+
+type Line {
+    id: Int
+    type: LineType
+    availableResults: [Result]
+    lineResult: Result
+    isClosed: Boolean
 }
