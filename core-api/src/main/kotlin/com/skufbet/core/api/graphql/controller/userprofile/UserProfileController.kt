@@ -23,14 +23,21 @@ class UserProfileController(
         userProfileMutation: UserProfileMutation,
         @Argument("userProfileCreateInput") userProfileCreateInput: UserProfileCreateInput
     ): UserProfileCreatePayload {
-        return userProfileCreationService.create(
-            UserProfileCreateCommand(
-                userProfileCreateInput.mail,
-                userProfileCreateInput.phoneNumber,
-                userProfileCreateInput.password
-            )
-        ).toPayload()
+        return userProfileCreationService
+            .create(userProfileCreateInput.toCommand())
+            .toPayload()
     }
+
+    fun UserProfileCreateInput.toCommand() = UserProfileCreateCommand(
+        this.mail,
+        this.phoneNumber,
+        this.password,
+        this.firstName,
+        this.lastName,
+        this.passport,
+        this.dateOfBirth,
+        this.taxPayerId
+    )
 
     fun UserProfile.toPayload() = UserProfileCreatePayload(this.id)
 }
