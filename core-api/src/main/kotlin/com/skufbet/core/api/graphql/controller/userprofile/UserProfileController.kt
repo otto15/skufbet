@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 
 @Controller
-@Validated
 class UserProfileController(
     private val userProfileCreationService: UserProfileCreationService
 ) {
@@ -24,7 +23,7 @@ class UserProfileController(
     @SchemaMapping("create")
     fun createProfile(
         userProfileMutation: UserProfileMutation,
-        @Argument("userProfileCreateInput") @Valid userProfileCreateInput: UserProfileCreateInput
+        @Argument("userProfileCreateInput") userProfileCreateInput: UserProfileCreateInput
     ): UserProfileCreatePayload {
         return userProfileCreationService
             .create(userProfileCreateInput.toCommand())
