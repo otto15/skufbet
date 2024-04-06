@@ -11,4 +11,5 @@
     <include file="sql/v202404051956_add_sample_line_data.sql" relativeToChangelogFile="true"/>
     <include file="sql/v202404052327_get_rid_of_line_type_table.sql" relativeToChangelogFile="true"/>
     <include file="sql/v202404052354_get_rid_of_sport_table.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404060224_add_constraints.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
