@@ -19,7 +19,6 @@ class EventDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
     }
 
     fun findTournamentById(id: Int): Tournament? = jdbcTemplate.queryForObject(
-
         FIND_TOURNAMENT_BY_ID,
         MapSqlParameterSource().addValue("tournament_id", id)
     ) { rs, _ ->
