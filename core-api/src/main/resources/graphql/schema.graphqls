@@ -1,3 +1,5 @@
+scalar Date
+
 type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
@@ -12,7 +14,14 @@ type UserProfileMutation {
 }
 
 input UserProfileCreateInput {
-    phoneNumber: String!
+    mail: String!
+    phoneNumber: String!,
+    password: String!,
+    firstName: String!,
+    lastName: String!,
+    passport: String!,
+    dateOfBirth: Date!,
+    taxPayerId: String!,
 }
 
 type UserProfileCreatePayload {

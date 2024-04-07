@@ -1,8 +1,8 @@
-package com.skufbet.core.api.graphql.model.userprofile.mutation.input
+package com.skufbet.core.api.userprofile.service.command
 
 import java.util.Date
 
-data class UserProfileCreateInput(
+data class UserProfileCreateCommand(
     val mail: String,
     val phoneNumber: String,
     val password: String,
