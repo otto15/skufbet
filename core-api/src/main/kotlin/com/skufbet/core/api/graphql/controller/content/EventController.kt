@@ -1,4 +1,4 @@
-package com.skufbet.core.api.graphql.controller.event
+package com.skufbet.core.api.graphql.controller.content
 
 import com.skufbet.core.api.event.service.EventService
 import com.skufbet.core.api.graphql.model.content.Event
