@@ -13,4 +13,5 @@
     <include file="sql/v202404052354_get_rid_of_sport_table.sql" relativeToChangelogFile="true"/>
     <include file="sql/v202404060002_change_alter_user_details_table.sql" relativeToChangelogFile="true"/>
     <include file="sql/v202404060102_drop_user_profile_details_id.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404060224_add_constraints.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
