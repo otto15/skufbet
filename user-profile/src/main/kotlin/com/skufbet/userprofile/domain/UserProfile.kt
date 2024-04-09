@@ -1,4 +1,4 @@
-package com.skufbet.core.api.userprofile.domain
+package com.skufbet.userprofile.domain
 
 data class UserProfile(
     val id: Int,
