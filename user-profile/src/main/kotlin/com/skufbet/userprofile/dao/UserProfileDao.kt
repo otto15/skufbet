@@ -1,6 +1,6 @@
 package com.skufbet.core.api.userprofile.dao
 
-import com.skufbet.core.api.userprofile.domain.UserProfile
+import com.skufbet.userprofile.domain.UserProfile
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 

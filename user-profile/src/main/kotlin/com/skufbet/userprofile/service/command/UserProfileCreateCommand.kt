@@ -1,4 +1,4 @@
-package com.skufbet.core.api.userprofile.service.command
+package com.skufbet.userprofile.service.command
 
 import java.util.Date
 

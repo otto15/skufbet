@@ -1,18 +1,23 @@
-package com.skufbet.core.api.configuration.userprofile
+package com.skufbet.userprofile.configuration
+
 
 import com.skufbet.core.api.userprofile.dao.UserProfileDao
 import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
-import com.skufbet.core.api.userprofile.service.UserProfileCreationService
 import com.skufbet.skufdb.id.IdGenerator
 import com.skufbet.skufdb.id.PgSequenceIdGenerator
+import com.skufbet.userprofile.service.UserProfileCreationService
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class UserProfileConfiguration {
+    @Bean
+    fun encoder() = BCryptPasswordEncoder()
+
     @Bean
     fun userProfileDao(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
         UserProfileDao(jdbcTemplate)

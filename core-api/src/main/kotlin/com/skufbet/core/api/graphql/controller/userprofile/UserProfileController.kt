@@ -1,11 +1,11 @@
 package com.skufbet.core.api.graphql.controller.userprofile
 
+import com.skufbet.core.api.clients.userprofile.UserProfileApiClient
+import com.skufbet.core.api.clients.userprofile.dto.CreateUserProfileRequestTo
+import com.skufbet.core.api.clients.userprofile.dto.ProfileIdTo
 import com.skufbet.core.api.graphql.model.userprofile.mutation.UserProfileMutation
 import com.skufbet.core.api.graphql.model.userprofile.mutation.input.UserProfileCreateInput
 import com.skufbet.core.api.graphql.model.userprofile.mutation.payload.UserProfileCreatePayload
-import com.skufbet.core.api.userprofile.domain.UserProfile
-import com.skufbet.core.api.userprofile.service.UserProfileCreationService
-import com.skufbet.core.api.userprofile.service.command.UserProfileCreateCommand
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller
 
 @Controller
 class UserProfileController(
-    private val userProfileCreationService: UserProfileCreationService
+    private val userProfileApiClient: UserProfileApiClient
 ) {
     @MutationMapping("userProfile")
     fun userProfileMutation() = UserProfileMutation()
@@ -23,12 +23,12 @@ class UserProfileController(
         userProfileMutation: UserProfileMutation,
         @Argument("userProfileCreateInput") userProfileCreateInput: UserProfileCreateInput
     ): UserProfileCreatePayload {
-        return userProfileCreationService
-            .create(userProfileCreateInput.toCommand())
+        return userProfileApiClient
+            .createUserProfile(userProfileCreateInput.toDto())
             .toPayload()
     }
 
-    fun UserProfileCreateInput.toCommand() = UserProfileCreateCommand(
+    fun UserProfileCreateInput.toDto() = CreateUserProfileRequestTo(
         this.mail,
         this.phoneNumber,
         this.password,
@@ -36,8 +36,8 @@ class UserProfileController(
         this.lastName,
         this.passport,
         this.dateOfBirth,
-        this.taxPayerId
+        this.taxPayerId,
     )
 
-    fun UserProfile.toPayload() = UserProfileCreatePayload(this.id)
+    fun ProfileIdTo.toPayload() = UserProfileCreatePayload(this.id)
 }

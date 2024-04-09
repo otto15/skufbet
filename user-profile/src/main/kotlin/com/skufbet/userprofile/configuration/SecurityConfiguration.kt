@@ -1,4 +1,4 @@
-package com.skufbet.core.api.configuration
+package com.skufbet.userprofile.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
