@@ -2,10 +2,10 @@ package com.skufbet.userprofile.service
 
 import com.skufbet.core.api.userprofile.dao.UserProfileDao
 import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
-import com.skufbet.userprofile.domain.UserProfile
 import com.skufbet.core.api.userprofile.domain.UserProfileDetails
+import com.skufbet.userprofile.domain.UserProfile
 import com.skufbet.userprofile.service.command.UserProfileCreateCommand
-import com.skufbet.skufdb.id.IdGenerator
+import com.skufbet.utils.database.id.IdGenerator
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.transaction.annotation.Transactional
 

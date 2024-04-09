@@ -1,4 +1,4 @@
-package com.skufbet.skufdb.configuration
+package com.skufbet.database.skufdb.configuration
 
 import liquibase.integration.spring.SpringLiquibase
 import org.springframework.context.annotation.Bean

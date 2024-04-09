@@ -1,4 +1,4 @@
-package com.skufbet.skufdb.id
+package com.skufbet.utils.database.id
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate

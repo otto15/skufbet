@@ -3,9 +3,9 @@ package com.skufbet.userprofile.configuration
 
 import com.skufbet.core.api.userprofile.dao.UserProfileDao
 import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
-import com.skufbet.skufdb.id.IdGenerator
-import com.skufbet.skufdb.id.PgSequenceIdGenerator
 import com.skufbet.userprofile.service.UserProfileCreationService
+import com.skufbet.utils.database.id.IdGenerator
+import com.skufbet.utils.database.id.PgSequenceIdGenerator
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
