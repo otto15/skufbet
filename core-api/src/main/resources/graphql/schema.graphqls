@@ -3,10 +3,6 @@ scalar Date
 type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
-<<<<<<< HEAD
-
-=======
->>>>>>> 7cd8e45 (batched queries simplified bd)
 }
 
 type Mutation {
@@ -62,14 +58,3 @@ type Line {
     lineResult: Result
     isClosed: Boolean
 }
-<<<<<<< HEAD
-
-#query {
-#    events {
-#        tournament {
-#            id
-#        }
-#    }
-#}
-=======
->>>>>>> 7cd8e45 (batched queries simplified bd)
