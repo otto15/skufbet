@@ -22,7 +22,6 @@ class CallbackService(
         for (i in 0 until min(100, queue.size)) {
             val task: CallbackTask = queue.poll()
             try {
-                println(task.request)
                 restTemplate.postForLocation(task.url, task.request)
             } catch (e: Exception) {
                 queue.offer(task)
