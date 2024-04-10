@@ -4,7 +4,7 @@ import com.skufbet.userprofile.domain.UserProfile
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
-class UserProfileDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
+class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
     fun insert(userProfile: UserProfile) {
         jdbcTemplate.update(
             INSERT_QUERY,

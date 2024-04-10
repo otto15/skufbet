@@ -1,4 +1,7 @@
 rootProject.name = "skufbet"
 include("core-api")
-include("skufdb")
+include("database-skufdb")
 include("user-profile")
+include("balance")
+include("database-balance")
+include("utils-database")

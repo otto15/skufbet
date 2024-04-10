@@ -28,7 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
-    implementation(project(":database-skufdb"))
+    implementation(project(":database-balance"))
     implementation(project(":utils-database"))
 
     runtimeOnly("org.postgresql:postgresql")
