@@ -3,8 +3,10 @@ package com.skufbet.userprofile.controller
 import com.skufbet.userprofile.domain.UserProfile
 import com.skufbet.userprofile.dto.CreateUserProfileRequestTo
 import com.skufbet.userprofile.dto.ProfileIdTo
+import com.skufbet.userprofile.service.UserProfileBalanceService
 import com.skufbet.userprofile.service.UserProfileCreationService
 import com.skufbet.userprofile.service.command.UserProfileCreateCommand
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserProfileController(
     private val userProfileCreationService: UserProfileCreationService,
+    private val userProfileBalanceService: UserProfileBalanceService,
 ) {
     @PostMapping("/user-profiles")
     fun create(@RequestBody createUserProfileRequestTo: CreateUserProfileRequestTo): ProfileIdTo {
@@ -19,6 +22,18 @@ class UserProfileController(
             .create(createUserProfileRequestTo.toCommand())
             .toDto()
     }
+
+    @PostMapping("/user-profiles/{id}/balance:withdraw")
+    fun withdrawFromBalance(@PathVariable id: Int, @RequestBody balanceOperationRequestTo: BalanceOperationRequestTo) {
+        userProfileBalanceService.withdraw(id, balanceOperationRequestTo.amount)
+    }
+
+    @PostMapping("/user-profiles/{id}/balance:deposit")
+    fun depositToBalance(@PathVariable id: Int, @RequestBody balanceOperationRequestTo: BalanceOperationRequestTo) {
+        userProfileBalanceService.deposit(id, balanceOperationRequestTo.amount)
+    }
+
+    data class BalanceOperationRequestTo(val amount: Int)
 
     fun CreateUserProfileRequestTo.toCommand() = UserProfileCreateCommand(
         this.mail,
