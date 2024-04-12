@@ -6,6 +6,9 @@ import com.skufbet.userprofile.dto.ProfileIdTo
 import com.skufbet.userprofile.service.UserProfileBalanceService
 import com.skufbet.userprofile.service.UserProfileCreationService
 import com.skufbet.userprofile.service.command.UserProfileCreateCommand
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,6 +37,13 @@ class UserProfileController(
     }
 
     data class BalanceOperationRequestTo(val amount: Int)
+
+    @GetMapping("/user-profiles/{id}")
+    fun get(@PathVariable id: Int) : ResponseEntity<Any> {
+        val userProfile = userProfileCreationService.get(id)
+        return userProfile?.let { ResponseEntity(userProfile, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+    }
 
     fun CreateUserProfileRequestTo.toCommand() = UserProfileCreateCommand(
         this.mail,

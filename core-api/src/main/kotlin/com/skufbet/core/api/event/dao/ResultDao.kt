@@ -44,5 +44,6 @@ class ResultDao(
             from line_result
             where line_id in (:ids)
         """.trimIndent()
+
     }
 }

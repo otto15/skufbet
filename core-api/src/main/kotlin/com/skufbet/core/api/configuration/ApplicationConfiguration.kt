@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.web.client.RestTemplate
+import java.util.concurrent.ScheduledThreadPoolExecutor
 
 @Configuration
 @Import(
@@ -22,6 +23,9 @@ class ApplicationConfiguration {
     @Bean
     fun betIdGenerator(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
         PgSequenceIdGenerator(BET_ID_SEQ, jdbcTemplate)
+
+    @Bean
+    fun coefficientValidatingScheduledPool() = ScheduledThreadPoolExecutor(10)
 
     companion object {
         private const val BET_ID_SEQ = "bet_id_seq"

@@ -1,10 +1,9 @@
-package com.skufbet.core.api.userprofile.dao
+package com.skufbet.userprofile.dao
 
 import com.skufbet.userprofile.domain.UserProfile
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-
 class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
     fun insert(userProfile: UserProfile) =
         jdbcTemplate.update(
@@ -53,6 +52,28 @@ class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             null
         }
 
+    fun getBy(id: Int): UserProfile? =
+        try {
+            jdbcTemplate.queryForObject(
+                GET_BY_ID_QUERY,
+                MapSqlParameterSource()
+                    .addValue("id", id)
+            ) { rs, _ ->
+                UserProfile(
+                    rs.getInt("id"),
+                    rs.getString("mail"),
+                    rs.getString("phone_number"),
+                    rs.getString("password"),
+                    rs.getInt("balance")
+                )
+            }
+        } catch (e: Exception) {
+            null
+        }
+
+
+
+
     companion object {
         private val INSERT_QUERY = """
             INSERT INTO user_profile (id, mail, phone_number, password, balance) 
@@ -75,5 +96,10 @@ class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             SET balance = balance + :amount
             WHERE id = :id
         """.trimIndent()
+        private val GET_BY_ID_QUERY = """
+            SELECT id, mail, phone_number, password, balance FROM user_profile
+            WHERE id = :id
+        """.trimIndent()
     }
 }
+

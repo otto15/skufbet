@@ -1,6 +1,6 @@
 package com.skufbet.userprofile.service
 
-import com.skufbet.core.api.userprofile.dao.UserProfileDao
+import com.skufbet.userprofile.dao.UserProfileDao
 import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
 import com.skufbet.core.api.userprofile.domain.UserProfileDetails
 import com.skufbet.userprofile.domain.UserProfile
@@ -40,4 +40,9 @@ open class UserProfileCreationService(
 
         return userProfile
     }
+
+    open fun get(id: Int) = userProfileDao.getBy(id)
+
+
+
 }
