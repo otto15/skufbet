@@ -36,14 +36,14 @@ class UserProfileController(
         userProfileBalanceService.deposit(id, balanceOperationRequestTo.amount)
     }
 
-    data class BalanceOperationRequestTo(val amount: Int)
-
     @GetMapping("/user-profiles/{id}")
     fun get(@PathVariable id: Int) : ResponseEntity<Any> {
         val userProfile = userProfileCreationService.get(id)
         return userProfile?.let { ResponseEntity(userProfile, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }
+
+    data class BalanceOperationRequestTo(val amount: Int)
 
     fun CreateUserProfileRequestTo.toCommand() = UserProfileCreateCommand(
         this.mail,

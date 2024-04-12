@@ -2,6 +2,7 @@ package com.skufbet.core.api.graphql.controller.bet
 
 import com.skufbet.core.api.clients.userprofile.UserProfileApiClient
 import com.skufbet.core.api.event.dto.GetUserProfileTo
+import com.skufbet.core.api.event.dto.UpdateUserBalanceRequestTo
 import com.skufbet.core.api.event.service.BetService
 import com.skufbet.core.api.event.service.command.BetCreateCommand
 import com.skufbet.core.api.graphql.model.bet.mutation.BetMutation
@@ -13,6 +14,7 @@ import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
+import java.lang.RuntimeException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -33,12 +35,18 @@ class BetController(
     ): BetCreatePayload {
         val bet = betService.create(betCreateInput.toCommand())
         CompletableFuture.supplyAsync {
-            userProfileApiClient.getUserProfile(bet.toDto())
+            userProfileApiClient.getUserProfile(bet.toGetUserProfileTo())
         }.thenApplyAsync {
-            it?.let {  }
+            it?.let {
+                try {
+                    userProfileApiClient.updateUserBalance(bet.toUpdateUserBalanceTo())
+                } catch (e: RuntimeException) {
+                    betService.balanceFail(bet.id)
+                }
+            } ?: betService.balanceFail(bet.id)
         }
         coefficientValidatingScheduledPool.schedule(
-            {betService.validateCoefficient(bet.id, bet.resultId, bet.coefficient)},
+            { betService.validateCoefficient(bet.id, bet.resultId, bet.coefficient) },
             TIME_TO_VALIDATE_COEFFICIENT,
             TimeUnit.SECONDS
         )
@@ -54,8 +62,13 @@ class BetController(
         BetStatus.VALIDATING.name
     )
 
-    fun Bet.toDto() = GetUserProfileTo(
+    fun Bet.toGetUserProfileTo() = GetUserProfileTo(
         this.userId,
+    )
+
+    fun Bet.toUpdateUserBalanceTo() = UpdateUserBalanceRequestTo(
+        this.userId,
+        this.amount
     )
 
     companion object {

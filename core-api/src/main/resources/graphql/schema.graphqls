@@ -7,7 +7,7 @@ type Query {
 
 type Mutation {
     userProfile: UserProfileMutation!
-    bet: BetMutation!
+    betMutation: BetMutation!
 }
 
 type BetMutation {
@@ -19,7 +19,7 @@ input BetCreateInput {
     lineId: Int!
     resultId: Int!
     amount: Int!
-    coefficient: Int!
+    coefficient: Float!
 }
 
 type BetCreatePayload {

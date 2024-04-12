@@ -1,6 +1,6 @@
 package com.skufbet.userprofile.service
 
-import com.skufbet.core.api.userprofile.dao.UserProfileDao
+import com.skufbet.userprofile.dao.UserProfileDao
 import com.skufbet.userprofile.domain.UserProfile
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -23,7 +23,7 @@ class UserProfileBalanceService(val userProfileDao: UserProfileDao) {
 
         if (userProfile.balance < amount) {
             throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
+                HttpStatus.CONFLICT,
                 "Withdrawal leads to negative balance"
             )
         }

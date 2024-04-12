@@ -48,7 +48,7 @@ class BetService(
         else {
             try {
                 val bet = betDao.getBy(betId)
-                if (bet!!.status != BetStatus.FAILED_BY_BALANCE.name) accept(betId)
+                if (bet!!.status == BetStatus.VALIDATING.name) accept(betId)
             } catch (e: Exception) {
                 throw RuntimeException("No bet found with id: $betId")
             }

@@ -63,7 +63,7 @@ class BetDao(
             WHERE id = :id
         """.trimIndent()
         private val GET_BY_ID = """
-            SELECT (id, user_id, line_id, result_id, amount, coefficient, status)
+            SELECT id, user_id, line_id, result_id, amount, coefficient, status
             FROM bet
             WHERE id = :id
         """.trimIndent()
