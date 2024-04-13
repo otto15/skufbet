@@ -5,7 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
-    fun insert(userProfile: UserProfile) =
+    fun insert(userProfile: UserProfile) {
         jdbcTemplate.update(
             INSERT_QUERY,
             MapSqlParameterSource()
@@ -15,6 +15,7 @@ class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
                 .addValue("password", userProfile.password)
                 .addValue("balance", userProfile.balance)
         )
+    }
 
     fun updateBalanceMinus(id: Int, amount: Int): Boolean =
         jdbcTemplate.update(

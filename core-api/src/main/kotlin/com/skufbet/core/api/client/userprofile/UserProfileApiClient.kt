@@ -1,7 +1,7 @@
-package com.skufbet.core.api.clients.userprofile
+package com.skufbet.core.api.client.userprofile
 
-import com.skufbet.core.api.clients.userprofile.dto.CreateUserProfileRequestTo
-import com.skufbet.core.api.clients.userprofile.dto.ProfileIdTo
+import com.skufbet.core.api.client.userprofile.dto.CreateUserProfileRequestTo
+import com.skufbet.core.api.client.userprofile.dto.ProfileIdTo
 import com.skufbet.core.api.bet.dto.GetUserProfileResponse
 import com.skufbet.core.api.bet.dto.GetUserProfileTo
 import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo

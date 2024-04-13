@@ -1,8 +1,8 @@
 package com.skufbet.core.api.graphql.controller.userprofile
 
-import com.skufbet.core.api.clients.userprofile.UserProfileApiClient
-import com.skufbet.core.api.clients.userprofile.dto.CreateUserProfileRequestTo
-import com.skufbet.core.api.clients.userprofile.dto.ProfileIdTo
+import com.skufbet.core.api.client.userprofile.UserProfileApiClient
+import com.skufbet.core.api.client.userprofile.dto.CreateUserProfileRequestTo
+import com.skufbet.core.api.client.userprofile.dto.ProfileIdTo
 import com.skufbet.core.api.graphql.model.userprofile.mutation.UserProfileMutation
 import com.skufbet.core.api.graphql.model.userprofile.mutation.input.UserProfileCreateInput
 import com.skufbet.core.api.graphql.model.userprofile.mutation.payload.UserProfileCreatePayload
