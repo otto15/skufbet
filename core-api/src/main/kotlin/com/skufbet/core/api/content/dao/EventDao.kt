@@ -1,7 +1,8 @@
-package com.skufbet.core.api.event.dao
+package com.skufbet.core.api.content.dao
 
 import com.skufbet.core.api.graphql.model.content.Event
 import com.skufbet.core.api.graphql.model.content.Tournament
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -18,15 +19,19 @@ class EventDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
         )
     }
 
-    fun findTournamentById(id: Int): Tournament? = jdbcTemplate.queryForObject(
-        FIND_TOURNAMENT_BY_ID,
-        MapSqlParameterSource().addValue("tournament_id", id)
-    ) { rs, _ ->
-        Tournament(
-            rs.getInt("id"),
-            rs.getString("tournament_name"),
-            rs.getBoolean("is_end")
-        )
+    fun findTournamentById(id: Int): Tournament? = try {
+        jdbcTemplate.queryForObject(
+            FIND_TOURNAMENT_BY_ID,
+            MapSqlParameterSource().addValue("tournament_id", id)
+        ) { rs, _ ->
+            Tournament(
+                rs.getInt("id"),
+                rs.getString("tournament_name"),
+                rs.getBoolean("is_end")
+            )
+        }
+    } catch (e: EmptyResultDataAccessException){
+        null
     }
 
     companion object {

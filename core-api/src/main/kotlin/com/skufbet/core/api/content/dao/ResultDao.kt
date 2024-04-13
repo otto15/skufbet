@@ -1,4 +1,4 @@
-package com.skufbet.core.api.event.dao
+package com.skufbet.core.api.content.dao
 
 import com.skufbet.core.api.graphql.model.content.Result
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -44,6 +44,5 @@ class ResultDao(
             from line_result
             where line_id in (:ids)
         """.trimIndent()
-
     }
 }

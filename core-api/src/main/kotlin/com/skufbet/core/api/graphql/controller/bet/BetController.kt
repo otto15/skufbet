@@ -1,10 +1,10 @@
 package com.skufbet.core.api.graphql.controller.bet
 
 import com.skufbet.core.api.clients.userprofile.UserProfileApiClient
-import com.skufbet.core.api.event.dto.GetUserProfileTo
-import com.skufbet.core.api.event.dto.UpdateUserBalanceRequestTo
-import com.skufbet.core.api.event.service.BetService
-import com.skufbet.core.api.event.service.command.BetCreateCommand
+import com.skufbet.core.api.bet.dto.GetUserProfileTo
+import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo
+import com.skufbet.core.api.bet.service.BetService
+import com.skufbet.core.api.bet.service.command.BetCreateCommand
 import com.skufbet.core.api.graphql.model.bet.mutation.BetMutation
 import com.skufbet.core.api.graphql.model.bet.mutation.input.BetCreateInput
 import com.skufbet.core.api.graphql.model.bet.mutation.payload.BetCreatePayload

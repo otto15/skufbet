@@ -1,4 +1,4 @@
-package com.skufbet.core.api.event.dao
+package com.skufbet.core.api.bet.dao
 
 import com.skufbet.core.api.graphql.model.content.Bet
 import org.springframework.dao.EmptyResultDataAccessException
@@ -37,15 +37,17 @@ class BetDao(
                 GET_BY_ID,
                 MapSqlParameterSource()
                     .addValue("id", betId)
-            ) { rs, _ -> Bet(
-                rs.getInt("id"),
-                rs.getInt("user_id"),
-                rs.getInt("line_id"),
-                rs.getInt("result_id"),
-                rs.getInt("amount"),
-                rs.getDouble("coefficient"),
-                rs.getString("status")
-            )}
+            ) { rs, _ ->
+                Bet(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getInt("line_id"),
+                    rs.getInt("result_id"),
+                    rs.getInt("amount"),
+                    rs.getDouble("coefficient"),
+                    rs.getString("status")
+                )
+            }
         } catch (e: EmptyResultDataAccessException) {
             null
         }

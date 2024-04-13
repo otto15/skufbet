@@ -1,6 +1,6 @@
-package com.skufbet.core.api.event.service
+package com.skufbet.core.api.content.service
 
-import com.skufbet.core.api.event.dao.EventDao
+import com.skufbet.core.api.content.dao.EventDao
 import com.skufbet.core.api.graphql.model.content.Event
 import com.skufbet.core.api.graphql.model.content.Tournament
 import org.springframework.stereotype.Service

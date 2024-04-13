@@ -1,8 +1,8 @@
-package com.skufbet.core.api.event.service
+package com.skufbet.core.api.bet.service
 
-import com.skufbet.core.api.event.dao.BetDao
-import com.skufbet.core.api.event.dao.ResultDao
-import com.skufbet.core.api.event.service.command.BetCreateCommand
+import com.skufbet.core.api.bet.dao.BetDao
+import com.skufbet.core.api.content.dao.ResultDao
+import com.skufbet.core.api.bet.service.command.BetCreateCommand
 import com.skufbet.core.api.graphql.model.content.Bet
 import com.skufbet.core.api.graphql.model.content.BetStatus
 import com.skufbet.utils.database.id.IdGenerator

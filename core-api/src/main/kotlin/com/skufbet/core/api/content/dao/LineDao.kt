@@ -1,4 +1,4 @@
-package com.skufbet.core.api.event.dao
+package com.skufbet.core.api.content.dao
 
 import com.skufbet.core.api.graphql.model.content.Line
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
