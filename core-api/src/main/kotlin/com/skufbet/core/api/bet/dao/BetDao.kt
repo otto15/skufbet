@@ -52,8 +52,6 @@ class BetDao(
             null
         }
 
-
-
     companion object {
         private val CREATE_BET = """
             INSERT INTO bet (id, user_id, line_id, result_id, amount, coefficient, status)
