@@ -40,7 +40,7 @@ class UserProfileController(
     fun get(@PathVariable id: Int) : ResponseEntity<Any> {
         val userProfile = userProfileCreationService.get(id)
         return userProfile?.let { ResponseEntity(userProfile, HttpStatus.OK) }
-            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+            ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     data class BalanceOperationRequestTo(val amount: Int)

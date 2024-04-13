@@ -52,6 +52,26 @@ class BetDao(
             null
         }
 
+    fun selectBy(lineId: Int): List<Bet> =
+        jdbcTemplate.query(
+            """
+                SELECT id, user_id, line_id, result_id, amount, coefficient, status
+                FROM bet
+                WHERE line_id = :line_id
+            """.trimIndent(),
+            MapSqlParameterSource().addValue("line_id", lineId)
+        ) { rs, _ ->
+            Bet(
+                rs.getInt("id"),
+                rs.getInt("user_id"),
+                rs.getInt("line_id"),
+                rs.getInt("result_id"),
+                rs.getInt("amount"),
+                rs.getDouble("coefficient"),
+                rs.getString("status")
+            )
+        }
+
     companion object {
         private val CREATE_BET = """
             INSERT INTO bet (id, user_id, line_id, result_id, amount, coefficient, status)

@@ -1,10 +1,10 @@
 package com.skufbet.core.api.client.userprofile
 
-import com.skufbet.core.api.client.userprofile.dto.CreateUserProfileRequestTo
-import com.skufbet.core.api.client.userprofile.dto.ProfileIdTo
 import com.skufbet.core.api.bet.dto.GetUserProfileResponse
 import com.skufbet.core.api.bet.dto.GetUserProfileTo
 import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo
+import com.skufbet.core.api.client.userprofile.dto.CreateUserProfileRequestTo
+import com.skufbet.core.api.client.userprofile.dto.ProfileIdTo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
-import java.lang.RuntimeException
 
 @Component
 class UserProfileApiClient(
@@ -46,6 +45,18 @@ class UserProfileApiClient(
             Void::class.java
         )
         if (response.statusCode.isSameCodeAs(HttpStatus.CONFLICT)) throw RuntimeException("Amount should be less than balance")
+        if (response.statusCode.isSameCodeAs(HttpStatus.BAD_REQUEST)) throw RuntimeException("Amount should be greater than 0")
+        if (response.statusCode.isSameCodeAs(HttpStatus.NOT_FOUND)) throw RuntimeException("User not found")
+    }
+
+    fun depositToUserBalance(updateUserBalanceRequest: UpdateUserBalanceRequestTo) {
+        val response = restTemplate.exchange(
+            "$serviceUrl/user-profiles/${updateUserBalanceRequest.id}/balance:deposit",
+            HttpMethod.POST,
+            HttpEntity(updateUserBalanceRequest),
+            Void::class.java
+        )
+
         if (response.statusCode.isSameCodeAs(HttpStatus.BAD_REQUEST)) throw RuntimeException("Amount should be greater than 0")
         if (response.statusCode.isSameCodeAs(HttpStatus.NOT_FOUND)) throw RuntimeException("User not found")
     }

@@ -4,11 +4,13 @@ type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
     betById(betId: Int!): Bet
+    userProfileById(id: Int!): UserProfile
 }
 
 type Mutation {
     userProfile: UserProfileMutation!
     betMutation: BetMutation!
+    line: LineMutation!
 }
 
 type BetMutation {
@@ -33,13 +35,31 @@ type UserProfileMutation {
 
 input UserProfileCreateInput {
     mail: String!
-    phoneNumber: String!,
-    password: String!,
-    firstName: String!,
-    lastName: String!,
-    passport: String!,
-    dateOfBirth: Date!,
-    taxPayerId: String!,
+    phoneNumber: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+    passport: String!
+    dateOfBirth: Date!
+    taxPayerId: String!
+}
+
+type LineMutation {
+    finish(finishLineInput: FinishLineInput!): FinishLinePayload!
+}
+
+input FinishLineInput {
+    resultId: Int!,
+}
+
+type FinishLinePayload {
+    lineId: Int!,
+    resultId: Int!,
+}
+
+type UserProfile {
+    id: Int!,
+    balance: Int!
 }
 
 type UserProfileCreatePayload {
