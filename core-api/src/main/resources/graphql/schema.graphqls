@@ -7,6 +7,23 @@ type Query {
 
 type Mutation {
     userProfile: UserProfileMutation!
+    betMutation: BetMutation!
+}
+
+type BetMutation {
+    create(betCreateInput: BetCreateInput!): BetCreatePayload!
+}
+
+input BetCreateInput {
+    userId: Int!
+    lineId: Int!
+    resultId: Int!
+    amount: Int!
+    coefficient: Float!
+}
+
+type BetCreatePayload {
+    id: Int!
 }
 
 type UserProfileMutation {

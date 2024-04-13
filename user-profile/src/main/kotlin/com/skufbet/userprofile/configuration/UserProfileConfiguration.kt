@@ -1,7 +1,7 @@
 package com.skufbet.userprofile.configuration
 
 
-import com.skufbet.core.api.userprofile.dao.UserProfileDao
+import com.skufbet.userprofile.dao.UserProfileDao
 import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
 import com.skufbet.userprofile.service.UserProfileCreationService
 import com.skufbet.utils.database.id.IdGenerator

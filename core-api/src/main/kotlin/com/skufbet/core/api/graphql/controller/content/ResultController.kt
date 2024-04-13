@@ -1,6 +1,6 @@
-package com.skufbet.core.api.graphql.controller.event
+package com.skufbet.core.api.graphql.controller.content
 
-import com.skufbet.core.api.event.service.LineService
+import com.skufbet.core.api.content.service.LineService
 import com.skufbet.core.api.graphql.model.content.Line
 import com.skufbet.core.api.graphql.model.content.Result
 import org.springframework.graphql.data.method.annotation.BatchMapping

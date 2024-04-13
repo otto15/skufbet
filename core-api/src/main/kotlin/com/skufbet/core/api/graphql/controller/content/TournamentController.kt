@@ -1,6 +1,6 @@
-package com.skufbet.core.api.graphql.controller.event
+package com.skufbet.core.api.graphql.controller.content
 
-import com.skufbet.core.api.event.service.EventService
+import com.skufbet.core.api.content.service.EventService
 import com.skufbet.core.api.graphql.model.content.Event
 import com.skufbet.core.api.graphql.model.content.Tournament
 import org.springframework.graphql.data.method.annotation.SchemaMapping

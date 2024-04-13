@@ -33,8 +33,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
 	implementation(project(":database-skufdb"))
+    implementation(project(mapOf("path" to ":utils-database")))
 
-	runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
 }
