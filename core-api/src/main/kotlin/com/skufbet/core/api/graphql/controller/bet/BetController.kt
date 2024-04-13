@@ -1,10 +1,10 @@
 package com.skufbet.core.api.graphql.controller.bet
 
-import com.skufbet.core.api.clients.userprofile.UserProfileApiClient
 import com.skufbet.core.api.bet.dto.GetUserProfileTo
 import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo
 import com.skufbet.core.api.bet.service.BetService
 import com.skufbet.core.api.bet.service.command.BetCreateCommand
+import com.skufbet.core.api.client.userprofile.UserProfileApiClient
 import com.skufbet.core.api.graphql.model.bet.mutation.BetMutation
 import com.skufbet.core.api.graphql.model.bet.mutation.input.BetCreateInput
 import com.skufbet.core.api.graphql.model.bet.mutation.payload.BetCreatePayload
@@ -14,7 +14,6 @@ import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
-import java.lang.RuntimeException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
