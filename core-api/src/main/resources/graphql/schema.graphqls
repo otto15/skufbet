@@ -3,6 +3,7 @@ scalar Date
 type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
+    betById(betId: Int!): Bet
 }
 
 type Mutation {
@@ -74,4 +75,22 @@ type Line {
     availableResults: [Result]
     lineResult: Result
     isClosed: Boolean
+}
+
+enum Status {
+    VALIDATING,
+    FAILED_BY_BALANCE,
+    FAILED_BY_COEFFICIENT,
+    ACCEPTED,
+    CALCULATED
+}
+
+type Bet {
+    id: Int
+    userId: Int
+    lineId: Int
+    resultId: Int
+    amount: Int
+    coefficient: Float
+    status: Status
 }

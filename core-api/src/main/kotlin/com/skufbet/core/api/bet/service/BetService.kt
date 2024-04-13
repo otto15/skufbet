@@ -54,4 +54,7 @@ class BetService(
             }
         }
     }
+
+    fun get(betId: Int): Bet? = betDao.getBy(betId)
+
 }
