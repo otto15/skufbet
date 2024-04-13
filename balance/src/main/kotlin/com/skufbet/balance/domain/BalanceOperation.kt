@@ -4,17 +4,12 @@ import java.util.UUID
 
 data class BalanceOperation(
     val id: UUID,
-    val paymentToken: String,
+    val paymentToken: String?,
     val userProfileId: Int,
     val amount: Int,
-    val type: Type,
+    val type: BalanceOperationType,
     val status: Status,
 ) {
-    enum class Type {
-        WITHDRAWAL,
-        DEPOSIT
-    }
-
     enum class Status {
         NOT_STARTED,
         STARTED,

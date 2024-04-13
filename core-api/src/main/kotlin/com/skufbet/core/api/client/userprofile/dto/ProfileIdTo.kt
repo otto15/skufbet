@@ -1,4 +1,4 @@
-package com.skufbet.core.api.clients.userprofile.dto
+package com.skufbet.core.api.client.userprofile.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
