@@ -16,5 +16,4 @@ class SkufdbLiquibaseConfiguration {
         }
         return liquibase
     }
-
 }
