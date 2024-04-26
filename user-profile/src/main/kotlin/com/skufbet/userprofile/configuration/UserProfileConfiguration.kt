@@ -19,11 +19,11 @@ class UserProfileConfiguration {
     fun encoder() = BCryptPasswordEncoder()
 
     @Bean
-    fun userProfileDao(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
+    fun userProfileDao(@Qualifier("userProfileJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
         UserProfileDao(jdbcTemplate)
 
     @Bean
-    fun userProfileDetailsDao(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
+    fun userProfileDetailsDao(@Qualifier("skufdbJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
         UserProfileDetailsDao(jdbcTemplate)
 
     @Bean
@@ -35,7 +35,7 @@ class UserProfileConfiguration {
     ) = UserProfileCreationService(idGenerator, userProfileDao, userProfileDetailsDao, passwordEncoder)
 
     @Bean
-    fun userProfileIdGenerator(@Qualifier("namedParameterJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
+    fun userProfileIdGenerator(@Qualifier("userProfileJdbcTemplate") jdbcTemplate: NamedParameterJdbcTemplate) =
         PgSequenceIdGenerator(USER_PROFILE_ID_SEQ, jdbcTemplate)
 
     companion object {

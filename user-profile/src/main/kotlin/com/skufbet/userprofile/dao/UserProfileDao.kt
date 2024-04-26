@@ -1,10 +1,13 @@
 package com.skufbet.userprofile.dao
 
 import com.skufbet.userprofile.domain.UserProfile
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-class UserProfileDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
+class UserProfileDao(
+    @Qualifier("userProfileJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate
+) {
     fun insert(userProfile: UserProfile) {
         jdbcTemplate.update(
             INSERT_QUERY,

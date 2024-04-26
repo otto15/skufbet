@@ -1,10 +1,13 @@
 package com.skufbet.core.api.userprofile.dao
 
 import com.skufbet.core.api.userprofile.domain.UserProfileDetails
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
-class UserProfileDetailsDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
+class UserProfileDetailsDao(
+    @Qualifier("skufdbJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate
+) {
     fun insert(userProfileDetails: UserProfileDetails) {
         jdbcTemplate.update(
             INSERT_QUERY,
