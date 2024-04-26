@@ -3,6 +3,8 @@ package com.skufbet.core.api.configuration
 import com.skufbet.database.skufdb.configuration.SkufdbLiquibaseConfiguration
 import com.skufbet.utils.database.id.PgSequenceIdGenerator
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -14,7 +16,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor
 @Import(
     SkufdbLiquibaseConfiguration::class,
 )
-class ApplicationConfiguration {
+class ApplicationConfiguration : BeanFactoryPostProcessor {
     @Bean
     fun restTemplate(): RestTemplate {
         return RestTemplate()
@@ -29,5 +31,9 @@ class ApplicationConfiguration {
 
     companion object {
         private const val BET_ID_SEQ = "bet_id_seq"
+    }
+
+    override fun postProcessBeanFactory(beanFactory: ConfigurableListableBeanFactory) {
+        beanFactory.registerAlias("dataSource", "skufdbDataSource")
     }
 }
