@@ -56,7 +56,7 @@ class BetController(
             } ?: betService.balanceFail(bet.id)
         }
         coefficientValidatingScheduledPool.schedule(
-            { betService.validateCoefficient(bet.id, bet.resultId, bet.coefficient) },
+            { betService.validateCoefficient(bet) },
             TIME_TO_VALIDATE_COEFFICIENT,
             TimeUnit.SECONDS
         )

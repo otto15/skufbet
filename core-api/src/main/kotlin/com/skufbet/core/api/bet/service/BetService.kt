@@ -52,23 +52,26 @@ class BetService(
         }
     }
 
-    private fun coefficientFail(betId: Int) {
-        betDao.changeStatus(betId, BetStatus.FAILED_BY_COEFFICIENT.name)
+    private fun coefficientFail(bet: Bet) {
+        betDao.changeStatus(bet.id, BetStatus.FAILED_BY_COEFFICIENT.name)
+        userProfileApiClient.depositToUserBalance(
+            UpdateUserBalanceRequestTo(bet.userId, bet.amount)
+        )
     }
 
     private fun accept(betId: Int) {
         betDao.changeStatus(betId, BetStatus.ACCEPTED.name)
     }
 
-    fun validateCoefficient(betId: Int, resultId: Int, coefficient: Double) {
-        val relevantCoefficient = resultDao.getResultById(resultId)?.coefficient
-        if (relevantCoefficient != coefficient) coefficientFail(betId)
+    fun validateCoefficient(bet: Bet) {
+        val relevantCoefficient = resultDao.getResultById(bet.resultId)?.coefficient
+        if (relevantCoefficient != bet.coefficient) coefficientFail(bet)
         else {
             try {
-                val bet = betDao.getBy(betId)
-                if (bet!!.status == BetStatus.VALIDATING.name) accept(betId)
+                val retrievedBet = betDao.getBy(bet.id)
+                if (retrievedBet!!.status == BetStatus.VALIDATING.name) accept(retrievedBet.id)
             } catch (e: Exception) {
-                throw RuntimeException("No bet found with id: $betId")
+                throw RuntimeException("No bet found with id: ${bet.id}")
             }
         }
     }

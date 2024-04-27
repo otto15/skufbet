@@ -18,7 +18,6 @@ type BetMutation {
 }
 
 input BetCreateInput {
-    userId: Int!
     lineId: Int!
     resultId: Int!
     amount: Int!
