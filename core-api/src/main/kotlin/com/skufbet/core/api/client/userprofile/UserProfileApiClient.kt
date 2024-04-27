@@ -6,11 +6,7 @@ import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo
 import com.skufbet.core.api.client.userprofile.dto.CreateUserProfileRequestTo
 import com.skufbet.core.api.client.userprofile.dto.ProfileIdTo
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
@@ -33,6 +29,13 @@ class UserProfileApiClient(
     fun getUserProfile(getUserProfileRequest: GetUserProfileTo): GetUserProfileResponse? {
         return restTemplate.getForObject(
             "$serviceUrl/user-profiles/${getUserProfileRequest.userId}",
+            GetUserProfileResponse::class.java
+        )
+    }
+
+    fun getUserProfileByKeycloakId(keycloakId: String): GetUserProfileResponse? {
+        return restTemplate.getForObject(
+            "$serviceUrl/user-profiles/keycloak/${keycloakId}",
             GetUserProfileResponse::class.java
         )
     }

@@ -1,9 +1,10 @@
 package com.skufbet.userprofile.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.Date
+import java.util.*
 
 data class CreateUserProfileRequestTo(
+    @JsonProperty("keycloakId") val keycloakId: String,
     @JsonProperty("mail") val mail: String,
     @JsonProperty("phoneNumber") val phoneNumber: String,
     @JsonProperty("password") val password: String,

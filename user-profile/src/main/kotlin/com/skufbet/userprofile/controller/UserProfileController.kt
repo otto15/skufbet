@@ -1,6 +1,6 @@
 package com.skufbet.userprofile.controller
 
-import com.skufbet.userprofile.domain.UserProfile
+import com.skufbet.common.userprofile.domain.UserProfile
 import com.skufbet.userprofile.dto.CreateUserProfileRequestTo
 import com.skufbet.userprofile.dto.ProfileIdTo
 import com.skufbet.userprofile.service.UserProfileBalanceService
@@ -8,11 +8,7 @@ import com.skufbet.userprofile.service.UserProfileCreationService
 import com.skufbet.userprofile.service.command.UserProfileCreateCommand
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class UserProfileController(
@@ -20,7 +16,9 @@ class UserProfileController(
     private val userProfileBalanceService: UserProfileBalanceService,
 ) {
     @PostMapping("/user-profiles")
-    fun create(@RequestBody createUserProfileRequestTo: CreateUserProfileRequestTo): ProfileIdTo {
+    fun create(
+        @RequestBody createUserProfileRequestTo: CreateUserProfileRequestTo
+    ): ProfileIdTo {
         return userProfileCreationService
             .create(createUserProfileRequestTo.toCommand())
             .toDto()
@@ -37,8 +35,15 @@ class UserProfileController(
     }
 
     @GetMapping("/user-profiles/{id}")
-    fun get(@PathVariable id: Int) : ResponseEntity<Any> {
+    fun get(@PathVariable id: Int): ResponseEntity<Any> {
         val userProfile = userProfileCreationService.get(id)
+        return userProfile?.let { ResponseEntity(userProfile, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NOT_FOUND)
+    }
+
+    @GetMapping("/user-profiles/keycloak/{id}")
+    fun getKeycloakId(@PathVariable id: String): ResponseEntity<Any> {
+        val userProfile = userProfileCreationService.getByKeycloakId(id)
         return userProfile?.let { ResponseEntity(userProfile, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
@@ -46,6 +51,7 @@ class UserProfileController(
     data class BalanceOperationRequestTo(val amount: Int)
 
     fun CreateUserProfileRequestTo.toCommand() = UserProfileCreateCommand(
+        this.keycloakId,
         this.mail,
         this.phoneNumber,
         this.password,

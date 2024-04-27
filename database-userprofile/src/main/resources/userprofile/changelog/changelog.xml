@@ -6,4 +6,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
     <include file="sql/v202404261428_baseline.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404262321_add_role_column.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202404270141_create_sequence.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

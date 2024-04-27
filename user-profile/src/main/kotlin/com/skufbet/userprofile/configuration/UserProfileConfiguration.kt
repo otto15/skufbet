@@ -3,7 +3,7 @@ package com.skufbet.userprofile.configuration
 
 import com.atomikos.icatch.jta.UserTransactionManager
 import com.skufbet.userprofile.dao.UserProfileDao
-import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
+import com.skufbet.userprofile.dao.UserProfileDetailsDao
 import com.skufbet.userprofile.service.UserProfileCreationService
 import com.skufbet.utils.database.id.IdGenerator
 import com.skufbet.utils.database.id.PgSequenceIdGenerator

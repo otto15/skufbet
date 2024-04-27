@@ -4,7 +4,7 @@ import com.skufbet.billing.domain.CallbackTask
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import java.util.Queue
+import java.util.*
 import java.util.concurrent.ArrayBlockingQueue
 import kotlin.math.min
 
