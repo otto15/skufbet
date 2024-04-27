@@ -4,7 +4,7 @@ type Query {
     events: [Event]
     linesByEventId(eventId: Int!): [Line]
     betById(betId: Int!): Bet
-    userProfileById(id: Int!): UserProfile
+    userProfile: UserProfile
 }
 
 type Mutation {

@@ -1,7 +1,7 @@
 package com.skufbet.userprofile.service
 
+import com.skufbet.common.userprofile.domain.UserProfile
 import com.skufbet.userprofile.dao.UserProfileDao
-import com.skufbet.userprofile.domain.UserProfile
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException

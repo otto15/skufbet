@@ -1,3 +1,13 @@
 package com.skufbet.core.api.bet.dto
 
-data class GetUserProfileResponse(val id: Int, val mail: String, val phoneNumber: String, val password: String, val balance: Int)
+import com.skufbet.common.userprofile.domain.UserProfileRole
+
+data class GetUserProfileResponse(
+    val id: Int,
+    val keycloakId: String,
+    val mail: String,
+    val phoneNumber: String,
+    val password: String,
+    val balance: Int,
+    val role: UserProfileRole
+)

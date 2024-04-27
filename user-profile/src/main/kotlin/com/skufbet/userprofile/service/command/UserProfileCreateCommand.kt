@@ -1,8 +1,9 @@
 package com.skufbet.userprofile.service.command
 
-import java.util.Date
+import java.util.*
 
 data class UserProfileCreateCommand(
+    val keycloakId: String,
     val mail: String,
     val phoneNumber: String,
     val password: String,

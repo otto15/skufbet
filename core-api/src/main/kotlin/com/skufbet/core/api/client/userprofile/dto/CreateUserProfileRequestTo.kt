@@ -1,8 +1,9 @@
 package com.skufbet.core.api.client.userprofile.dto
 
-import java.util.Date
+import java.util.*
 
 data class CreateUserProfileRequestTo(
+    val keycloakId: String,
     val mail: String,
     val phoneNumber: String,
     val password: String,

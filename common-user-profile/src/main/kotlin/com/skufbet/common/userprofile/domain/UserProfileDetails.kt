@@ -1,6 +1,6 @@
-package com.skufbet.core.api.userprofile.domain
+package com.skufbet.common.userprofile.domain
 
-import java.util.Date
+import java.util.*
 
 data class UserProfileDetails(
     val userProfileId: Int,

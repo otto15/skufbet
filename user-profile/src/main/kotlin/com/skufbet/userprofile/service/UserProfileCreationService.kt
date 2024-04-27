@@ -1,9 +1,10 @@
 package com.skufbet.userprofile.service
 
+import com.skufbet.common.userprofile.domain.UserProfile
+import com.skufbet.common.userprofile.domain.UserProfileDetails
+import com.skufbet.common.userprofile.domain.UserProfileRole
 import com.skufbet.userprofile.dao.UserProfileDao
-import com.skufbet.core.api.userprofile.dao.UserProfileDetailsDao
-import com.skufbet.core.api.userprofile.domain.UserProfileDetails
-import com.skufbet.userprofile.domain.UserProfile
+import com.skufbet.userprofile.dao.UserProfileDetailsDao
 import com.skufbet.userprofile.service.command.UserProfileCreateCommand
 import com.skufbet.utils.database.id.IdGenerator
 import org.springframework.beans.factory.annotation.Qualifier
@@ -67,10 +68,12 @@ open class UserProfileCreationService(
 
         val userProfile = UserProfile(
             userProfileIdGenerator.generate(),
+            userProfileCreateCommand.keycloakId,
             userProfileCreateCommand.mail,
             userProfileCreateCommand.phoneNumber,
             passwordEncoder.encode(userProfileCreateCommand.password),
-            0
+            0,
+            UserProfileRole.CLIENT
         )
 
         userProfileDao.insert(userProfile)
@@ -88,8 +91,7 @@ open class UserProfileCreationService(
         return userProfile
     }
 
-    open fun get(id: Int) = userProfileDao.getBy(id)
+    open fun get(id: Int) = userProfileDao.selectBy(id)
 
-
-
+    open fun getByKeycloakId(keycloakId: String) = userProfileDao.selectByKeycloakId(keycloakId)
 }

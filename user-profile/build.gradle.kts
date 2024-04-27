@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":database-skufdb"))
     implementation(project(":database-userprofile"))
     implementation(project(":utils-database"))
+    implementation(project(":common-user-profile"))
 
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

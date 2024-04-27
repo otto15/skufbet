@@ -1,6 +1,7 @@
 package com.skufbet.userprofile.dao
 
-import com.skufbet.userprofile.domain.UserProfile
+import com.skufbet.common.userprofile.domain.UserProfile
+import com.skufbet.common.userprofile.domain.UserProfileRole
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -16,10 +17,12 @@ class UserProfileDao(
             INSERT_QUERY,
             MapSqlParameterSource()
                 .addValue("id", userProfile.id)
+                .addValue("keycloak_id", userProfile.keycloakId)
                 .addValue("mail", userProfile.mail)
                 .addValue("phone_number", userProfile.phoneNumber)
                 .addValue("password", userProfile.password)
                 .addValue("balance", userProfile.balance)
+                .addValue("role", userProfile.role.name)
         )
     }
 
@@ -49,29 +52,33 @@ class UserProfileDao(
             ) { rs, _ ->
                 UserProfile(
                     rs.getInt("id"),
+                    rs.getString("keycloak_id"),
                     rs.getString("mail"),
                     rs.getString("phone_number"),
                     rs.getString("password"),
-                    rs.getInt("balance")
+                    rs.getInt("balance"),
+                    UserProfileRole.valueOf(rs.getString("role"))
                 )
             }
         } catch (e: EmptyResultDataAccessException) {
             null
         }
 
-    fun getBy(id: Int): UserProfile? =
+    fun selectByKeycloakId(keycloakId: String): UserProfile? =
         try {
             jdbcTemplate.queryForObject(
-                GET_BY_ID_QUERY,
+                SELECT_BY_KEYCLOAK_ID,
                 MapSqlParameterSource()
-                    .addValue("id", id)
+                    .addValue("keycloak_id", keycloakId)
             ) { rs, _ ->
                 UserProfile(
                     rs.getInt("id"),
+                    rs.getString("keycloak_id"),
                     rs.getString("mail"),
                     rs.getString("phone_number"),
                     rs.getString("password"),
-                    rs.getInt("balance")
+                    rs.getInt("balance"),
+                    UserProfileRole.valueOf(rs.getString("role"))
                 )
             }
         } catch (e: Exception) {
@@ -83,12 +90,12 @@ class UserProfileDao(
 
     companion object {
         private val INSERT_QUERY = """
-            INSERT INTO user_profile (id, mail, phone_number, password, balance) 
-            VALUES (:id, :mail, :phone_number, :password, :balance)
+            INSERT INTO user_profile (id, keycloak_id, mail, phone_number, password, balance, role) 
+            VALUES (:id, :keycloak_id, :mail, :phone_number, :password, :balance, :role)
         """.trimIndent()
 
         private val SELECT_BY_ID = """
-            SELECT id, mail, phone_number, password, balance FROM user_profile
+            SELECT id, keycloak_id, mail, phone_number, password, balance, role FROM user_profile
             WHERE id = :id
         """.trimIndent()
 
@@ -103,9 +110,9 @@ class UserProfileDao(
             SET balance = balance + :amount
             WHERE id = :id
         """.trimIndent()
-        private val GET_BY_ID_QUERY = """
-            SELECT id, mail, phone_number, password, balance FROM user_profile
-            WHERE id = :id
+        private val SELECT_BY_KEYCLOAK_ID = """
+            SELECT id, keycloak_id, mail, phone_number, password, balance, role FROM user_profile
+            WHERE keycloak_id = :keycloak_id
         """.trimIndent()
     }
 }

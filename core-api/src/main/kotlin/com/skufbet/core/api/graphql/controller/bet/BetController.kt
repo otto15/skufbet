@@ -1,5 +1,8 @@
 package com.skufbet.core.api.graphql.controller.bet
 
+import com.skufbet.common.userprofile.auth.domain.AuthenticatedUser
+import com.skufbet.common.userprofile.domain.UserProfilePermission
+import com.skufbet.core.api.auth.AuthHelper
 import com.skufbet.core.api.bet.dto.GetUserProfileTo
 import com.skufbet.core.api.bet.dto.UpdateUserBalanceRequestTo
 import com.skufbet.core.api.bet.service.BetService
@@ -10,6 +13,7 @@ import com.skufbet.core.api.graphql.model.bet.mutation.input.BetCreateInput
 import com.skufbet.core.api.graphql.model.bet.mutation.payload.BetCreatePayload
 import com.skufbet.core.api.graphql.model.content.Bet
 import com.skufbet.core.api.graphql.model.content.BetStatus
+import graphql.schema.DataFetchingEnvironment
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -30,10 +34,16 @@ class BetController(
 
     @SchemaMapping("create")
     fun create(
+        env: DataFetchingEnvironment,
         betMutation: BetMutation,
         @Argument("betCreateInput") betCreateInput: BetCreateInput
     ): BetCreatePayload {
-        val bet = betService.create(betCreateInput.toCommand())
+        val authenticatedUser: AuthenticatedUser = AuthHelper.checkAndGetAuthenticatedUser(
+            env,
+            setOf(UserProfilePermission.MAKE_BET)
+        )
+
+        val bet = betService.create(betCreateInput.toCommand(authenticatedUser.id))
         CompletableFuture.supplyAsync {
             userProfileApiClient.getUserProfile(bet.toGetUserProfileTo())
         }.thenApplyAsync {
@@ -54,12 +64,14 @@ class BetController(
     }
 
     @QueryMapping
-    fun betById(@Argument betId: Int): Bet? {
+    fun betById(env: DataFetchingEnvironment, @Argument betId: Int): Bet? {
+        AuthHelper.checkAuthenticatedUser(env, setOf(UserProfilePermission.EXPLORE_BET))
+
         return betService.get(betId)
     }
 
-    fun BetCreateInput.toCommand() = BetCreateCommand(
-        this.userId,
+    fun BetCreateInput.toCommand(userId: Int) = BetCreateCommand(
+        userId,
         this.lineId,
         this.resultId,
         this.amount,
