@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import java.sql.Connection
+import javax.sql.DataSource
+
 class UserProfileDao(
-    @Qualifier("userProfileJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate
+    @Qualifier("userProfileJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate,
 ) {
     fun insert(userProfile: UserProfile) {
         jdbcTemplate.update(
