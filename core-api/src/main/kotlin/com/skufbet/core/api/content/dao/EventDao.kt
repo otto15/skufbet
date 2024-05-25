@@ -2,13 +2,14 @@ package com.skufbet.core.api.content.dao
 
 import com.skufbet.core.api.graphql.model.content.Event
 import com.skufbet.core.api.graphql.model.content.Tournament
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class EventDao(val jdbcTemplate: NamedParameterJdbcTemplate) {
+class EventDao(@Qualifier("skufdbJdbcTemplate") val jdbcTemplate: NamedParameterJdbcTemplate) {
     fun findAll(): List<Event> = jdbcTemplate.query(FIND_AVAILABLE) { rs, _ ->
         Event(
             rs.getInt("id"),

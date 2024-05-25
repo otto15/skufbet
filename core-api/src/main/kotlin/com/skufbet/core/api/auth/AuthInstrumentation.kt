@@ -10,6 +10,7 @@ import graphql.execution.instrumentation.InstrumentationContext
 import graphql.execution.instrumentation.InstrumentationState
 import graphql.execution.instrumentation.SimplePerformantInstrumentation
 import graphql.execution.instrumentation.parameters.InstrumentationExecutionParameters
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.client.HttpClientErrorException.NotFound
@@ -19,7 +20,7 @@ class AuthInstrumentation(private val userProfileApiClient: UserProfileApiClient
         parameters: InstrumentationExecutionParameters,
         state: InstrumentationState?
     ): InstrumentationContext<ExecutionResult>? {
-
+        log.info("Starting auth...")
         val user: User = if (ANONYMOUS_USER == SecurityContextHolder.getContext().authentication.principal) {
             AnonymousUser
         } else {
@@ -41,6 +42,7 @@ class AuthInstrumentation(private val userProfileApiClient: UserProfileApiClient
     }
 
     companion object {
+        private val log = LoggerFactory.getLogger(AuthInstrumentation::class.java)
         private const val ANONYMOUS_USER = "anonymousUser"
     }
 }

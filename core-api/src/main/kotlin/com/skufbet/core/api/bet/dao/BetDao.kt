@@ -1,6 +1,7 @@
 package com.skufbet.core.api.bet.dao
 
 import com.skufbet.core.api.graphql.model.content.Bet
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class BetDao(
-    private val jdbcTemplate: NamedParameterJdbcTemplate
+    @Qualifier("skufdbJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate
 ) {
     fun create(bet: Bet) =
         jdbcTemplate.update(
@@ -72,6 +73,14 @@ class BetDao(
             )
         }
 
+//    fun deleteFailed() =
+//        jdbcTemplate.update(
+//            DELETE_FAILED,
+//            MapSqlParameterSource()
+//                .addValue("status", status)
+//                .addValue("id", betId)
+//        )
+
     companion object {
         private val CREATE_BET = """
             INSERT INTO bet (id, user_id, line_id, result_id, amount, coefficient, status)
@@ -86,6 +95,10 @@ class BetDao(
             SELECT id, user_id, line_id, result_id, amount, coefficient, status
             FROM bet
             WHERE id = :id
+        """.trimIndent()
+        private val DELETE_FAILED = """
+            DELETE FROM bet
+            WHERE id AND status IN ('FAILED_BY_BALANCE', 'FAILED_BY_COEFFICIENT')
         """.trimIndent()
     }
 }

@@ -1,0 +1,156 @@
+version: "3.9"
+services:
+  core-api-1:
+    container_name: core-api-1
+    image: library/core-api:0.0.1-SNAPSHOT
+    environment:
+      USER_PROFILE_HOST: "user-profile"
+      KEYCLOAK_HOST: "keycloak"
+      KEYCLOAK_PORT: 8080
+    networks:
+      - skufbet
+
+  core-api-2:
+    container_name: core-api-2
+    image: library/core-api:0.0.1-SNAPSHOT
+    environment:
+      USER_PROFILE_HOST: "user-profile"
+      KEYCLOAK_HOST: "keycloak"
+      KEYCLOAK_PORT: 8080
+    networks:
+      - skufbet
+
+  core-api-jobs-1:
+    container_name: core-api-jobs-1
+    image: library/core-api:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "jobs"
+      KEYCLOAK_HOST: "keycloak"
+      KEYCLOAK_PORT: 8080
+
+  core-api-jobs-2:
+    container_name: core-api-jobs-2
+    image: library/core-api:0.0.1-SNAPSHOT
+    environment:
+      SPRING_PROFILES_ACTIVE: "jobs"
+      KEYCLOAK_HOST: "keycloak"
+      KEYCLOAK_PORT: 8080
+
+  balancer:
+    image: nginx
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+    ports:
+      - "80:80"
+    depends_on:
+      - core-api-1
+      - core-api-2
+    networks:
+      - skufbet
+
+  user-profile:
+    container_name: user-profile
+    image: library/user-profile:0.0.1-SNAPSHOT
+    networks:
+      - skufbet
+
+  balance:
+    container_name: balance
+    image: library/balance:0.0.1-SNAPSHOT
+    ports:
+      - "12335:12335"
+    environment:
+      USER_PROFILE_HOST: "user-profile"
+      BILLING_HOST: "billing"
+      BALANCE_HOST: "balance"
+    networks:
+      - skufbet
+
+  billing:
+    container_name: billing
+    image: library/billing-mock:0.0.1-SNAPSHOT
+    networks:
+      - skufbet
+
+  keycloak-postgres:
+    image: library/postgres:${KC_POSTGRES_IMAGE_TAG:-14}
+    container_name: ${POSTGRES_CONTAINER_NAME:-postgres}
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: pg_isready -d postgres
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - ${KC_POSTGRES_PORT_MAPPING:-5435}:5432
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - skufbet
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.2
+    container_name: keycloak
+    command:
+      - start --auto-build --db postgres --hostname-strict-https false --hostname-strict false --proxy edge --http-enabled true --import-realm --spi-user-profile-legacy-user-profile-read-only-attributes *_RES_ACCESS_MODE
+    environment:
+      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_DB_SCHEMA: public
+      KC_FEATURES: preview
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - type: bind
+        source: ./core-api/src/main/resources/keycloak/import/realm-export.json
+        target: /opt/keycloak/data/import/realm-export.json
+        read_only: true
+    ports:
+      - "8282:8080"
+    depends_on:
+      keycloak-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/realms/master"]
+      start_period: 10s
+      interval: 30s
+      retries: 3
+      timeout: 5s
+    networks:
+      - skufbet
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+networks:
+  skufbet:

@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate
 @Service
 class UserProfileClient(
     private val restTemplate: RestTemplate,
-    @Value("\${user-profile.url}")
+    @Value("\${user.profile.url}")
     private val url: String,
 ) {
     fun withdrawFromBalance(userProfileId: Int, updateUserBalanceRequest: UpdateUserBalanceRequestTo) {

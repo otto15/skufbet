@@ -15,5 +15,4 @@ class BalanceDbLiquibaseConfiguration {
         }
         return liquibase
     }
-
 }
