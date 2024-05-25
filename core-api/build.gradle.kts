@@ -28,17 +28,19 @@ dependencies {
 	implementation("org.springframework.security:spring-security-oauth2-jose")
 
 	implementation("com.tailrocks.graphql:graphql-datetime-spring-boot-starter:6.0.0")
-
+	
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-
+	
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
+	implementation("org.springframework.kafka:spring-kafka:3.1.2")
+	
 	implementation(project(":database-skufdb"))
-    implementation(project(mapOf("path" to ":utils-database")))
+	implementation(project(mapOf("path" to ":utils-database")))
 	implementation(project(":common-user-profile"))
 
-    runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
 }

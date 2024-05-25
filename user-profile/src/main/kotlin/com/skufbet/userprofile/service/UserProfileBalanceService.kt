@@ -12,26 +12,26 @@ class UserProfileBalanceService(val userProfileDao: UserProfileDao) {
         if (amount <= 0) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Negative amount provided"
+                "Negative amount provided",
             )
         }
 
         val userProfile: UserProfile = userProfileDao.selectBy(userProfileId) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
-            "User profile with id: $userProfileId not found"
+            "User profile with id: $userProfileId not found",
         )
 
         if (userProfile.balance < amount) {
             throw ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "Withdrawal leads to negative balance"
+                "Withdrawal leads to negative balance",
             )
         }
 
         if (!userProfileDao.updateBalanceMinus(userProfileId, amount)) {
             throw ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "Withdrawal is rejected due to access conflict"
+                "Withdrawal is rejected due to access conflict",
             )
         }
     }
@@ -40,13 +40,13 @@ class UserProfileBalanceService(val userProfileDao: UserProfileDao) {
         if (amount <= 0) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "Negative amount provided"
+                "Negative amount provided",
             )
         }
 
         userProfileDao.selectBy(userProfileId) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
-            "User profile with id: $userProfileId not found"
+            "User profile with id: $userProfileId not found",
         )
 
         userProfileDao.updateBalancePlus(userProfileId, amount)

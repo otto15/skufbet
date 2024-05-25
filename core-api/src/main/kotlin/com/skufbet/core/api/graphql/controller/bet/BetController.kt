@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 class BetController(
     private val userProfileApiClient: UserProfileApiClient,
     private val betService: BetService,
-    private val coefficientValidatingScheduledPool: ScheduledThreadPoolExecutor
+    private val coefficientValidatingScheduledPool: ScheduledThreadPoolExecutor,
 ) {
     @MutationMapping
     fun betMutation() = BetMutation()
@@ -36,12 +36,13 @@ class BetController(
     fun create(
         env: DataFetchingEnvironment,
         betMutation: BetMutation,
-        @Argument("betCreateInput") betCreateInput: BetCreateInput
+        @Argument("betCreateInput") betCreateInput: BetCreateInput,
     ): BetCreatePayload {
-        val authenticatedUser: AuthenticatedUser = AuthHelper.checkAndGetAuthenticatedUser(
-            env,
-            setOf(UserProfilePermission.MAKE_BET)
-        )
+        val authenticatedUser: AuthenticatedUser =
+            AuthHelper.checkAndGetAuthenticatedUser(
+                env,
+                setOf(UserProfilePermission.MAKE_BET),
+            )
 
         val bet = betService.create(betCreateInput.toCommand(authenticatedUser.id))
         CompletableFuture.supplyAsync {
@@ -58,7 +59,7 @@ class BetController(
         coefficientValidatingScheduledPool.schedule(
             { betService.validateCoefficient(bet) },
             TIME_TO_VALIDATE_COEFFICIENT,
-            TimeUnit.SECONDS
+            TimeUnit.SECONDS,
         )
         return BetCreatePayload(bet.id)
     }
@@ -76,7 +77,7 @@ class BetController(
         this.resultId,
         this.amount,
         this.coefficient,
-        BetStatus.VALIDATING.name
+        BetStatus.VALIDATING.name,
     )
 
     fun Bet.toGetUserProfileTo() = GetUserProfileTo(
@@ -85,7 +86,7 @@ class BetController(
 
     fun Bet.toUpdateUserBalanceTo() = UpdateUserBalanceRequestTo(
         this.userId,
-        this.amount
+        this.amount,
     )
 
     companion object {

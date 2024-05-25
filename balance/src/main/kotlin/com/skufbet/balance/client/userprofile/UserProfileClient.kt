@@ -20,7 +20,7 @@ class UserProfileClient(
                 "$url/user-profiles/${userProfileId}/balance:withdraw",
                 HttpMethod.POST,
                 HttpEntity(updateUserBalanceRequest),
-                Void::class.java
+                Void::class.java,
             )
         } catch (e: HttpClientErrorException) {
             if (e.statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
@@ -39,7 +39,7 @@ class UserProfileClient(
                 "$url/user-profiles/${userProfileId}/balance:deposit",
                 HttpMethod.POST,
                 HttpEntity(updateUserBalanceRequest),
-                Void::class.java
+                Void::class.java,
             )
         } catch (e: HttpClientErrorException) {
             if (e.statusCode.isSameCodeAs(HttpStatus.NOT_FOUND)) {

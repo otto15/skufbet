@@ -38,12 +38,12 @@ class BalanceOperationService(
         } catch (e: ConflictBalanceException) {
             throw ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "Unsufficient funds on the balance for userProfileId: ${command.userProfileId}"
+                "Unsufficient funds on the balance for userProfileId: ${command.userProfileId}",
             )
         } catch (e: NotFoundException) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "User profile not found for userProfileId: ${command.userProfileId}"
+                "User profile not found for userProfileId: ${command.userProfileId}",
             )
         }
 
@@ -53,7 +53,7 @@ class BalanceOperationService(
             command.userProfileId,
             command.amount,
             BalanceOperationType.WITHDRAWAL,
-            BalanceOperation.Status.NOT_STARTED
+            BalanceOperation.Status.NOT_STARTED,
         )
 
         return create(balanceOperation)
@@ -68,8 +68,8 @@ class BalanceOperationService(
                 command.userProfileId,
                 command.amount,
                 BalanceOperationType.DEPOSIT,
-                BalanceOperation.Status.NOT_STARTED
-            )
+                BalanceOperation.Status.NOT_STARTED,
+            ),
         )
     }
 

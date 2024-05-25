@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class AuthenticatedUserMethodArgumentResolver : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.hasParameterAnnotation(ResolvedAuthenticatedUser::class.java)
-                && parameter.parameterType == AuthenticatedUser::class.java
+            && parameter.parameterType == AuthenticatedUser::class.java
     }
 
     override fun resolveArgument(parameter: MethodParameter, environment: DataFetchingEnvironment): Any {

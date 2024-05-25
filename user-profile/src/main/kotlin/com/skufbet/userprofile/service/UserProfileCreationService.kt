@@ -23,49 +23,6 @@ open class UserProfileCreationService(
 ) {
     @Transactional(transactionManager = "jtaTransactionManager")
     open fun create(userProfileCreateCommand: UserProfileCreateCommand): UserProfile {
-        //todo rewrite for jdbc
-
-//        val userProfile = userProfileDataSource.connection.use { upCon ->
-//            skufdbDataSource.connection.use { sdbCon ->
-//                val generateId = upCon.createStatement()
-//                val idRs = generateId.executeQuery("""
-//                    SELECT nextval('user_profile_id_seq')
-//                """.trimIndent())
-//                if (!idRs.next()) throw RuntimeException("broken sequence")
-//                val userProfile = UserProfile(
-//                    idRs.getInt(1),
-//                    userProfileCreateCommand.mail,
-//                    userProfileCreateCommand.phoneNumber,
-//                    passwordEncoder.encode(userProfileCreateCommand.password),
-//                    0
-//                )
-//                val upInsert = upCon.prepareStatement("""
-//                    INSERT INTO user_profile (id, mail, phone_number, password, balance)
-//                    VALUES (?, ?, ?, ?, ?)
-//                """.trimIndent())
-//                upInsert.setInt(1, userProfile.id)
-//                upInsert.setString(2, userProfile.mail)
-//                upInsert.setString(3, userProfile.phoneNumber)
-//                upInsert.setString(4, userProfile.password)
-//                upInsert.setInt(5, userProfile.balance)
-//                upInsert.execute()
-//                upInsert.close()
-//                val updInsert = sdbCon.prepareStatement("""
-//                    INSERT INTO user_profile_details (user_profile_id, first_name, last_name, passport, date_of_birth, taxpayer_id)
-//                    VALUES (?, ?, ?, ?, ?, ?);
-//                """.trimIndent())
-//                updInsert.setInt(1, userProfile.id)
-//                updInsert.setString(2, userProfileCreateCommand.firstName)
-//                updInsert.setString(3, userProfileCreateCommand.lastName)
-//                updInsert.setString(4, userProfileCreateCommand.passport)
-//                updInsert.setDate(5, Date(userProfileCreateCommand.dateOfBirth.time))
-//                updInsert.setString(6, userProfileCreateCommand.taxPayerId)
-//                updInsert.execute()
-//                updInsert.close()
-//                userProfile
-//            }
-//        }
-
         val userProfile = UserProfile(
             userProfileIdGenerator.generate(),
             userProfileCreateCommand.keycloakId,

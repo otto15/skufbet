@@ -12,7 +12,7 @@ object AuthHelper {
 
     fun checkAuthenticatedUser(
         env: DataFetchingEnvironment,
-        permissions: Set<UserProfilePermission>
+        permissions: Set<UserProfilePermission>,
     ) {
         val user: User = env.graphQlContext[AUTHORIZATION_ATTRIBUTE]
 
@@ -27,7 +27,7 @@ object AuthHelper {
 
     fun checkAndGetAuthenticatedUser(
         env: DataFetchingEnvironment,
-        permissions: Set<UserProfilePermission> = setOf()
+        permissions: Set<UserProfilePermission> = setOf(),
     ): AuthenticatedUser {
         val user: User = env.graphQlContext[AUTHORIZATION_ATTRIBUTE]
 
