@@ -7,6 +7,8 @@ import com.skufbet.core.api.client.userprofile.UserProfileApiClient
 import com.skufbet.core.api.content.dao.ResultDao
 import com.skufbet.core.api.graphql.model.content.Bet
 import com.skufbet.core.api.graphql.model.content.BetStatus
+import com.skufbet.core.api.kafka.MessageProducer
+import com.skufbet.core.api.kafka.dto.BalanceOperationMessage
 import com.skufbet.utils.database.id.IdGenerator
 import org.springframework.stereotype.Service
 import kotlin.math.floor
@@ -17,6 +19,7 @@ class BetService(
     private val betDao: BetDao,
     private val resultDao: ResultDao,
     private val userProfileApiClient: UserProfileApiClient,
+    private val messageProducer: MessageProducer,
 ) {
     fun create(betCreateCommand: BetCreateCommand): Bet {
         val bet = Bet(
@@ -43,10 +46,8 @@ class BetService(
             betDao.changeStatus(it.id, BetStatus.CALCULATED.name)
             it
         }.filter { it.resultId == resultId }
-        .map {
-            userProfileApiClient.depositToUserBalance(
-                UpdateUserBalanceRequestTo(it.userId, floor(it.amount * it.coefficient).toInt())
-            )
+        .forEach {
+            messageProducer.sendMessage(message = BalanceOperationMessage(it.userId, floor(it.amount * it.coefficient).toInt()))
         }
 
 
