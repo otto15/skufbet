@@ -1,6 +1,7 @@
 package com.skufbet.balance.domain
 
-import java.util.UUID
+import java.time.Instant
+import java.util.*
 
 data class BalanceOperation(
     val id: UUID,
@@ -9,11 +10,14 @@ data class BalanceOperation(
     val amount: Int,
     val type: BalanceOperationType,
     val status: Status,
+    val createdDate: Instant
 ) {
     enum class Status {
         NOT_STARTED,
         STARTED,
         PROCESSED,
+        CLEARED,
+        CLEARING_FAILED,
         FAILED
     }
 }

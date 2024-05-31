@@ -20,23 +20,8 @@ services:
     networks:
       - skufbet
 
-  core-api-jobs-1:
-    container_name: core-api-jobs-1
-    image: library/core-api:0.0.1-SNAPSHOT
-    environment:
-      SPRING_PROFILES_ACTIVE: "jobs"
-      KEYCLOAK_HOST: "keycloak"
-      KEYCLOAK_PORT: 8080
-
-  core-api-jobs-2:
-    container_name: core-api-jobs-2
-    image: library/core-api:0.0.1-SNAPSHOT
-    environment:
-      SPRING_PROFILES_ACTIVE: "jobs"
-      KEYCLOAK_HOST: "keycloak"
-      KEYCLOAK_PORT: 8080
-
   balancer:
+    container_name: balancer
     image: nginx
     volumes:
       - type: bind
@@ -57,11 +42,19 @@ services:
     networks:
       - skufbet
 
-  balance:
-    container_name: balance
+  balance-1:
+    container_name: balance-1
     image: library/balance:0.0.1-SNAPSHOT
-    ports:
-      - "12335:12335"
+    environment:
+      USER_PROFILE_HOST: "user-profile"
+      BILLING_HOST: "billing"
+      BALANCE_HOST: "balance"
+    networks:
+      - skufbet
+
+  balance-2:
+    container_name: balance-2
+    image: library/balance:0.0.1-SNAPSHOT
     environment:
       USER_PROFILE_HOST: "user-profile"
       BILLING_HOST: "billing"
@@ -137,6 +130,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "22181:2181"
+    networks:
+      - skufbet
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
@@ -151,6 +146,20 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - skufbet
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8082:8080"
+    depends_on:
+      - kafka
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+    networks:
+      - skufbet
 
 networks:
   skufbet:

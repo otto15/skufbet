@@ -6,4 +6,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
     <include file="sql/v202404100110_baseline.sql" relativeToChangelogFile="true"/>
+    <include file="sql/v202405262151_add_created_date.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

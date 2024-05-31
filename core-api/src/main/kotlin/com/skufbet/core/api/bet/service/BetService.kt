@@ -36,21 +36,19 @@ class BetService(
         betDao.changeStatus(betId, BetStatus.FAILED_BY_BALANCE.name)
     }
 
-    fun finish(lineId: Int, resultId: Int) {
-        val bets: List<Bet> = betDao.selectBy(lineId)
-
-        bets.forEach {
-            if ("ACCEPTED" == it.status) {
-                betDao.changeStatus(it.id, BetStatus.CALCULATED.name)
-
-                if (resultId == it.resultId) {
-                    userProfileApiClient.depositToUserBalance(
-                        UpdateUserBalanceRequestTo(it.userId, floor(it.amount * it.coefficient).toInt())
-                    )
-                }
-            }
+    fun finish(lineId: Int, resultId: Int) = betDao.selectBy(lineId)
+        .asSequence()
+        .filter { it.status == "ACCEPTED" }
+        .map {
+            betDao.changeStatus(it.id, BetStatus.CALCULATED.name)
+            it
+        }.filter { it.resultId == resultId }
+        .map {
+            userProfileApiClient.depositToUserBalance(
+                UpdateUserBalanceRequestTo(it.userId, floor(it.amount * it.coefficient).toInt())
+            )
         }
-    }
+
 
     private fun coefficientFail(bet: Bet) {
         betDao.changeStatus(bet.id, BetStatus.FAILED_BY_COEFFICIENT.name)

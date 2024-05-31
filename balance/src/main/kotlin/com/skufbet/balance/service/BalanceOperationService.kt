@@ -1,6 +1,7 @@
 package com.skufbet.balance.service
 
 import com.skufbet.balance.client.billing.BillingClient
+import com.skufbet.balance.client.billing.dto.PaymentClearingResponse
 import com.skufbet.balance.client.billing.dto.PaymentCreationRequest
 import com.skufbet.balance.client.billing.dto.PaymentCreationResponse
 import com.skufbet.balance.client.userprofile.ConflictBalanceException
@@ -21,7 +22,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
-import java.util.UUID
+import java.time.Instant
+import java.util.*
 
 @Service
 class BalanceOperationService(
@@ -53,7 +55,8 @@ class BalanceOperationService(
             command.userProfileId,
             command.amount,
             BalanceOperationType.WITHDRAWAL,
-            BalanceOperation.Status.NOT_STARTED
+            BalanceOperation.Status.NOT_STARTED,
+            Instant.now()
         )
 
         return create(balanceOperation)
@@ -68,7 +71,8 @@ class BalanceOperationService(
                 command.userProfileId,
                 command.amount,
                 BalanceOperationType.DEPOSIT,
-                BalanceOperation.Status.NOT_STARTED
+                BalanceOperation.Status.NOT_STARTED,
+                Instant.now()
             )
         )
     }
@@ -91,6 +95,36 @@ class BalanceOperationService(
                 updatePaymentTokenCommand.status
             )
         }
+    }
+
+    fun getAvailableForClearing(clearingTriggeringDate: Instant): List<BalanceOperation> = balanceOperationDao.selectBy(
+        BalanceOperation.Status.PROCESSED,
+        clearingTriggeringDate
+    )
+
+    @Transactional
+    fun clear(balanceOperationId: UUID) {
+        val balanceOperation: BalanceOperation = balanceOperationDao.selectForUpdateBy(balanceOperationId)
+            ?: throw IllegalStateException(
+                "No purchase found with id: $balanceOperationId"
+            )
+
+        if (balanceOperation.status != BalanceOperation.Status.PROCESSED) {
+            throw IllegalArgumentException(
+                "Illegal status: ${balanceOperation.status} of operation: ${balanceOperation.id}"
+            )
+        }
+
+        val paymentToken: String = balanceOperation.paymentToken ?: throw IllegalStateException(
+            "Payment token required for clearing, balanceOperationId: ${balanceOperation.id}"
+        )
+        val paymentClearingResponse: PaymentClearingResponse = billingClient.clearPayment(paymentToken)
+
+        val newStatus: BalanceOperation.Status = if (paymentClearingResponse.status == "SUCCESS")
+            BalanceOperation.Status.CLEARED
+        else BalanceOperation.Status.CLEARING_FAILED
+
+        balanceOperationDao.updateStatus(balanceOperation.copy(status = newStatus))
     }
 
     private fun create(balanceOperation: BalanceOperation): BalanceOperationCreationTo {

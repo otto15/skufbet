@@ -1,5 +1,6 @@
 package com.skufbet.balance.client.billing
 
+import com.skufbet.balance.client.billing.dto.PaymentClearingResponse
 import com.skufbet.balance.client.billing.dto.PaymentCreationRequest
 import com.skufbet.balance.client.billing.dto.PaymentCreationResponse
 import org.springframework.beans.factory.annotation.Value
@@ -17,5 +18,12 @@ class BillingClient(
             "$url/v1/payments",
             paymentCreationRequest,
             PaymentCreationResponse::class.java
+        ) ?: throw IllegalStateException("Request to billing failed")
+
+    fun clearPayment(paymentToken: String): PaymentClearingResponse =
+        restTemplate.postForObject(
+            "$url/v1/payments/$paymentToken/clearing",
+            null,
+            PaymentClearingResponse::class.java
         ) ?: throw IllegalStateException("Request to billing failed")
 }

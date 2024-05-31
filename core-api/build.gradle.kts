@@ -28,6 +28,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.security:spring-security-oauth2-jose")
 
+	implementation("org.springframework.kafka:spring-kafka")
+
 	implementation("com.tailrocks.graphql:graphql-datetime-spring-boot-starter:6.0.0")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

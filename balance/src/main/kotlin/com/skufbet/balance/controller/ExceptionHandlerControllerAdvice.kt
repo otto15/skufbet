@@ -9,8 +9,7 @@ import org.springframework.web.server.ResponseStatusException
 class ExceptionHandlerControllerAdvice {
     @ExceptionHandler(ResponseStatusException::class)
     fun handleException(exception: ResponseStatusException): ResponseEntity<ApiHttpErrorTo?>? {
-        return ResponseEntity
-            .status(exception.statusCode)
+        return ResponseEntity.status(exception.statusCode)
             .body<ApiHttpErrorTo?>(ApiHttpErrorTo(exception.reason))
     }
 

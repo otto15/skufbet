@@ -21,6 +21,7 @@ import javax.sql.DataSource
 @Import(
     SkufdbLiquibaseConfiguration::class,
     SchedulingConfiguration::class,
+    KafkaProducerConfiguration::class,
 )
 class ApplicationConfiguration {
     @Bean
