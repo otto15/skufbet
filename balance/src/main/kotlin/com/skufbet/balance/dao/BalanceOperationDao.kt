@@ -2,6 +2,7 @@ package com.skufbet.balance.dao
 
 import com.skufbet.balance.domain.BalanceOperation
 import com.skufbet.balance.domain.BalanceOperationType
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -11,7 +12,7 @@ import java.time.Instant
 import java.util.*
 
 @Repository
-class BalanceOperationDao(private val jdbcTemplate: NamedParameterJdbcTemplate) {
+class BalanceOperationDao(@Qualifier("balanceJdbcTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate) {
     fun insert(balanceOperation: BalanceOperation) {
         jdbcTemplate.update(
             """

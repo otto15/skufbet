@@ -1,6 +1,8 @@
 package com.skufbet.billing.service
 
 import com.skufbet.billing.domain.CallbackTask
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -22,10 +24,15 @@ class CallbackService(
         for (i in 0 until min(100, queue.size)) {
             val task: CallbackTask = queue.poll()
             try {
+                log.info("Send callback url: ${task.url}, body: ${task.request}")
                 restTemplate.postForLocation(task.url, task.request)
             } catch (e: Exception) {
                 queue.offer(task)
             }
         }
+    }
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(CallbackService::class.java)
     }
 }

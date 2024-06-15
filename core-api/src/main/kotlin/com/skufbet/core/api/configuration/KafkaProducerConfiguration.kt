@@ -3,6 +3,7 @@ package com.skufbet.core.api.configuration
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.skufbet.core.api.kafka.dto.BalanceOperationMessage
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.RoundRobinPartitioner
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -31,6 +32,7 @@ class KafkaProducerConfiguration {
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = JsonSerializer::class.java
+        configProps[ProducerConfig.PARTITIONER_CLASS_CONFIG] = RoundRobinPartitioner::class.java
 
         val kafkaProducer = DefaultKafkaProducerFactory<String, BalanceOperationMessage>(configProps)
         kafkaProducer.valueSerializer = JsonSerializer(objectMapper)

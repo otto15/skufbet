@@ -2,21 +2,29 @@ version: "3.9"
 services:
   core-api-1:
     container_name: core-api-1
-    image: library/core-api:0.0.1-SNAPSHOT
+    image: openjdk:17-oracle
+    volumes:
+      - ./core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar:/core-api.jar
+    command: [ "java", "-jar", "core-api.jar" ]
     environment:
-      USER_PROFILE_HOST: "user-profile"
+      USER_PROFILE_HOST: "balancer"
       KEYCLOAK_HOST: "keycloak"
       KEYCLOAK_PORT: 8080
+      KAFKA_HOST: "kafka"
     networks:
       - skufbet
 
   core-api-2:
     container_name: core-api-2
-    image: library/core-api:0.0.1-SNAPSHOT
+    image: openjdk:17-oracle
+    volumes:
+      - ./core-api/build/libs/core-api-0.0.1-SNAPSHOT.jar:/core-api.jar
+    command: [ "java", "-jar", "core-api.jar" ]
     environment:
-      USER_PROFILE_HOST: "user-profile"
+      USER_PROFILE_HOST: "balancer"
       KEYCLOAK_HOST: "keycloak"
       KEYCLOAK_PORT: 8080
+      KAFKA_HOST: "kafka"
     networks:
       - skufbet
 
@@ -33,38 +41,67 @@ services:
     depends_on:
       - core-api-1
       - core-api-2
+      - balance-1
+      - balance-2
+      - user-profile-1
+      - user-profile-2
     networks:
       - skufbet
 
-  user-profile:
-    container_name: user-profile
-    image: library/user-profile:0.0.1-SNAPSHOT
+  user-profile-1:
+    container_name: user-profile-1
+    image: openjdk:17-oracle
+    volumes:
+      - ./user-profile/build/libs/user-profile-0.0.1-SNAPSHOT.jar:/user-profile.jar
+    command: [ "java", "-jar", "user-profile.jar" ]
+    environment:
+      KAFKA_HOST: "kafka"
+    networks:
+      - skufbet
+
+  user-profile-2:
+    container_name: user-profile-2
+    image: openjdk:17-oracle
+    volumes:
+      - ./user-profile/build/libs/user-profile-0.0.1-SNAPSHOT.jar:/user-profile.jar
+    command: [ "java", "-jar", "user-profile.jar" ]
+    environment:
+      KAFKA_HOST: "kafka"
     networks:
       - skufbet
 
   balance-1:
     container_name: balance-1
-    image: library/balance:0.0.1-SNAPSHOT
+    image: openjdk:17-oracle
+    volumes:
+      - ./balance/build/libs/balance-0.0.1-SNAPSHOT.jar:/balance.jar
+    command: [ "java", "-jar", "balance.jar" ]
     environment:
-      USER_PROFILE_HOST: "user-profile"
+      USER_PROFILE_HOST: "balancer/user-profile"
       BILLING_HOST: "billing"
-      BALANCE_HOST: "balance"
+      BALANCE_HOST: "balancer/balance"
     networks:
       - skufbet
 
   balance-2:
     container_name: balance-2
-    image: library/balance:0.0.1-SNAPSHOT
+    image: openjdk:17-oracle
+    volumes:
+      - ./balance/build/libs/balance-0.0.1-SNAPSHOT.jar:/balance.jar
+    command: [ "java", "-jar", "balance.jar" ]
     environment:
-      USER_PROFILE_HOST: "user-profile"
+      USER_PROFILE_HOST: "balancer/user-profile"
       BILLING_HOST: "billing"
-      BALANCE_HOST: "balance"
+      BALANCE_HOST: "balancer/balance"
     networks:
       - skufbet
 
   billing:
     container_name: billing
-    image: library/billing-mock:0.0.1-SNAPSHOT
+    image: openjdk:17-oracle
+    volumes:
+      - ./billing-mock/build/libs/billing-mock-0.0.1-SNAPSHOT.jar:/billing-mock.jar
+    command: [ "java", "-jar", "billing-mock.jar" ]
     networks:
       - skufbet
 
@@ -135,8 +172,6 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
-    depends_on:
-      - zookeeper
     ports:
       - "29092:29092"
     environment:
@@ -158,8 +193,12 @@ services:
       - kafka
     environment:
       DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
     networks:
       - skufbet
 
 networks:
   skufbet:
+    driver: bridge

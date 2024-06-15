@@ -43,7 +43,7 @@ class UserProfileClient(
             )
         } catch (e: HttpClientErrorException) {
             if (e.statusCode.isSameCodeAs(HttpStatus.NOT_FOUND)) {
-                throw NotFoundException("User profile not found")
+                throw NotFoundException("User profile: $userProfileId not found")
             }
         }
     }

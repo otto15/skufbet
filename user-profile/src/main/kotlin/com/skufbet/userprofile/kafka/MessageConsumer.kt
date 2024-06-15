@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component
 class MessageConsumer(
     private val balanceService: UserProfileBalanceService
 ) {
-    @KafkaListener(topics = ["skufbet-topic"], groupId = "deposit-group")
-    fun listen(@Payload message: List<BalanceOperationMessage>) {
-        log.error("Received message: $message")
-        message.forEach {
+    @KafkaListener(topics = ["deposit-topic"], groupId = "deposit-group")
+    fun listen(@Payload message: List<BalanceOperationMessage?>) {
+        log.info("Received message: $message")
+        message.filterNotNull().forEach {
             balanceService.deposit(it.clientId, it.amount)
         }
     }

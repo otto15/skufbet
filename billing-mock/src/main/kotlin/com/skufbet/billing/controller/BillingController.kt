@@ -22,7 +22,7 @@ class BillingController(
                 CallbackTask.Request(
                     paymentToken,
                     Random.nextInt(1, 100)
-                        .let { if (it > 90) CallbackTask.Status.FAILED else CallbackTask.Status.SUCCESS }
+                        .let { if (it > 50) CallbackTask.Status.FAILED else CallbackTask.Status.SUCCESS }
                 ),
                 paymentCreationRequest.callbackUrl
             )
@@ -36,7 +36,7 @@ class BillingController(
 
     @PostMapping("/v1/payments/{id}/clearing")
     fun clearPayment(@PathVariable id: String) = PaymentClearingResponse(
-        Random.nextInt(1, 100).let { if (it > 90) "FAILED" else "SUCCESS" }
+        Random.nextInt(1, 100).let { if (it > 50) "FAILED" else "SUCCESS" }
     )
 
     data class PaymentCreationRequest(

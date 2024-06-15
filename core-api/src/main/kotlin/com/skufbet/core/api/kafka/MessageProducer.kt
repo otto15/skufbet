@@ -9,7 +9,7 @@ class MessageProducer(
     private val kafkaTemplate: KafkaTemplate<String, BalanceOperationMessage>
 ) {
     fun sendMessage(
-        topic: String = "skufbet-topic",
+        topic: String = "deposit-topic",
         message: BalanceOperationMessage
     ) {
         kafkaTemplate.send(topic, message)

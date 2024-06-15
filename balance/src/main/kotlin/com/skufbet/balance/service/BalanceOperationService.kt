@@ -27,13 +27,14 @@ import java.util.*
 
 @Service
 class BalanceOperationService(
+    private val monitoringService: BalanceMonitoringService,
     private val balanceOperationDao: BalanceOperationDao,
     private val billingClient: BillingClient,
     private val userProfileClient: UserProfileClient,
     @Value("\${balance.url}")
     private val balanceUrl: String,
 ) {
-    @Transactional
+    @Transactional(transactionManager = "balanceTransactionManager")
     fun createWithdrawal(command: BalanceOperationCreateCommand): BalanceOperationCreationTo {
         try {
             userProfileClient.withdrawFromBalance(command.userProfileId, UpdateUserBalanceRequestTo(command.amount))
@@ -62,7 +63,7 @@ class BalanceOperationService(
         return create(balanceOperation)
     }
 
-    @Transactional
+    @Transactional(transactionManager = "balanceTransactionManager")
     fun createDeposit(command: BalanceOperationCreateCommand): BalanceOperationCreationTo {
         return create(
             BalanceOperation(
@@ -77,7 +78,7 @@ class BalanceOperationService(
         )
     }
 
-    @Transactional
+    @Transactional(transactionManager = "balanceTransactionManager")
     fun updatePaymentToken(updatePaymentTokenCommand: UpdatePaymentTokenCommand) {
         val balanceOperation: BalanceOperation =
             balanceOperationDao.selectBy(updatePaymentTokenCommand.paymentToken) ?: throw IllegalStateException(
@@ -102,7 +103,7 @@ class BalanceOperationService(
         clearingTriggeringDate
     )
 
-    @Transactional
+    @Transactional(transactionManager = "balanceTransactionManager")
     fun clear(balanceOperationId: UUID) {
         val balanceOperation: BalanceOperation = balanceOperationDao.selectForUpdateBy(balanceOperationId)
             ?: throw IllegalStateException(
@@ -120,9 +121,14 @@ class BalanceOperationService(
         )
         val paymentClearingResponse: PaymentClearingResponse = billingClient.clearPayment(paymentToken)
 
-        val newStatus: BalanceOperation.Status = if (paymentClearingResponse.status == "SUCCESS")
-            BalanceOperation.Status.CLEARED
-        else BalanceOperation.Status.CLEARING_FAILED
+        val newStatus: BalanceOperation.Status =
+            if (paymentClearingResponse.status == "SUCCESS") {
+                monitoringService.monitorClearingSuccess(balanceOperation.type)
+                BalanceOperation.Status.CLEARED
+            } else {
+                monitoringService.monitorClearingFailure(balanceOperation.type)
+                BalanceOperation.Status.CLEARING_FAILED
+            }
 
         balanceOperationDao.updateStatus(balanceOperation.copy(status = newStatus))
     }
@@ -154,6 +160,8 @@ class BalanceOperationService(
                     status = BalanceOperation.Status.PROCESSED
                 )
                 balanceOperationDao.updateStatus(updatedBalanceOperation)
+
+                monitoringService.monitorProcessingSuccess(BalanceOperationType.WITHDRAWAL)
             }
 
             FAILED -> {
@@ -167,6 +175,7 @@ class BalanceOperationService(
                 )
 
                 balanceOperationDao.updateStatus(updatedBalanceOperation)
+                monitoringService.monitorProcessingFailure(BalanceOperationType.WITHDRAWAL)
             }
         }
     }
@@ -184,6 +193,7 @@ class BalanceOperationService(
                 )
 
                 balanceOperationDao.updateStatus(updatedBalanceOperation)
+                monitoringService.monitorProcessingSuccess(BalanceOperationType.DEPOSIT)
             }
 
             FAILED -> {
@@ -192,6 +202,7 @@ class BalanceOperationService(
                 )
 
                 balanceOperationDao.updateStatus(updatedBalanceOperation)
+                monitoringService.monitorProcessingFailure(BalanceOperationType.DEPOSIT)
             }
         }
     }
